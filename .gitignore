@@ -40,5 +40,4 @@ yarn-error.log*
 next-env.d.ts
 
 # Large assets
-public/videos/
 *.exe

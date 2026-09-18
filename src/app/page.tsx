@@ -15,10 +15,10 @@ const liveCallVariants = [
 ];
 
 const crmVariants = [
-  { lead: "John Doe", status: "Test Drive Booked" },
-  { lead: "Sarah Smith", status: "Finance Enquiry Logged" },
-  { lead: "Mike Johnson", status: "Service Confirmed" },
-  { lead: "David Wilson", status: "Rescheduled (Fri)" }
+  { lead: "Rahul Menon", status: "Test Drive Booked" },
+  { lead: "Anjali Nair", status: "Finance Enquiry Logged" },
+  { lead: "Priya Sharma", status: "Service Confirmed" },
+  { lead: "Vikram Reddy", status: "Rescheduled (Fri)" }
 ];
 
 export default function LandingPage() {
@@ -236,7 +236,7 @@ export default function LandingPage() {
       </section>
 
       {/* Proposed Call Flow */}
-      <section id="flow" className="py-32 bg-gray-50 dark:bg-mahindra-dark relative z-20">
+      <section id="call-flow" className="py-32 bg-gray-50 dark:bg-mahindra-dark relative z-20">
         <div className="max-w-7xl mx-auto px-6 md:px-16 text-center mb-20">
           <h2 className="text-3xl md:text-5xl font-bold uppercase tracking-tighter">Proposed <span className="text-mahindra-red">Call Flow</span></h2>
         </div>
@@ -324,6 +324,7 @@ function VideoBackground({ videoId, opacity = "opacity-60", scale = "scale-[1.35
         loop
         muted
         playsInline
+        preload="auto"
         className={`absolute inset-0 w-full h-full object-cover ${opacity} ${scale}`}
       >
         <source src={`/videos/${videoId}.mp4`} type="video/mp4" />

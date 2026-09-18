@@ -107,7 +107,7 @@ export default function OutboundTriggerPage() {
   };
 
   const downloadTemplate = () => {
-    const template = "phone,customer_name,vehicle_name,context\n+919876543210,John Doe,XUV700,Service Reminder for 10 AM tomorrow\n";
+    const template = "phone,customer_name,vehicle,context\n+919876543210,Rahul Menon,XUV700,Service Reminder for 10 AM tomorrow\n";
     const blob = new Blob([template], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -154,7 +154,7 @@ export default function OutboundTriggerPage() {
                   type="text" 
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
-                  placeholder="e.g. John Doe" 
+                  placeholder="e.g. Rahul Menon" 
                   className="w-full bg-gray-50 dark:bg-mahindra-dark border border-gray-200 dark:border-white/10 p-3 text-sm focus:outline-none focus:border-mahindra-red transition-colors dark:text-white text-gray-900"
                 />
               </div>
@@ -258,9 +258,9 @@ export default function OutboundTriggerPage() {
                             </span>
                             <div className="flex flex-wrap gap-2 mt-1 text-xs text-gray-500 font-mono">
                               <span>{phone}</span>
-                              {row.vehicle_name && (
+                              { (row.vehicle || row.vehicle_name) && (
                                 <span className="bg-gray-100 dark:bg-white/5 px-2 py-0.5 rounded-full border border-gray-200 dark:border-white/10 text-[10px]">
-                                  🚗 {row.vehicle_name}
+                                  🚗 {row.vehicle || row.vehicle_name}
                                 </span>
                               )}
                               {row.context && (

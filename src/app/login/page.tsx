@@ -30,7 +30,10 @@ export default function LoginPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (username === "admin" && password === "admin") {
+    const validUser = process.env.NEXT_PUBLIC_ADMIN_USER || "admin";
+    const validPass = process.env.NEXT_PUBLIC_ADMIN_PASS || "mahindra";
+
+    if (username === validUser && password === validPass) {
       router.push("/dashboard");
     } else {
       setError(true);
@@ -48,6 +51,7 @@ export default function LoginPage() {
           autoPlay
           muted
           playsInline
+          preload="auto"
           className="absolute top-1/2 left-1/2 min-w-full min-h-full object-cover -translate-x-1/2 -translate-y-1/2 scale-[1.35] opacity-40 transition-opacity duration-1000"
         />
         {/* Dark vignette gradient overlay for better contrast */}
@@ -74,7 +78,7 @@ export default function LoginPage() {
         <form onSubmit={handleLogin} className="space-y-6">
           {error && (
             <div className="bg-mahindra-red/20 border border-mahindra-red text-white text-sm text-center py-3 px-4 rounded-sm animate-pulse">
-              Invalid credentials. Default: admin / admin.
+              Invalid credentials.
             </div>
           )}
 
