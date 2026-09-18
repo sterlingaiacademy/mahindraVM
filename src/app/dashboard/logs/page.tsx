@@ -1,0 +1,160 @@
+import { Search, Download, Filter, ExternalLink } from "lucide-react";
+import Papa from "papaparse";
+
+export const revalidate = 0;
+
+export default async function CallLogsPage() {
+  let logs: any[] = [];
+  let error = null;
+
+  try {
+    const sheetId = "1EuYUHCElFWq6AgsA-FWFGfnRCxQTOdKG_73725C0fXg";
+    const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
+    
+    const res = await fetch(csvUrl, { cache: "no-store" });
+    if (!res.ok) {
+      throw new Error(`Failed to fetch: ${res.statusText}`);
+    }
+    const csvText = await res.text();
+    const parsed = Papa.parse(csvText, { header: true, skipEmptyLines: true });
+    
+    // Reverse so newest entries are at the top (assuming chronologically appended)
+    logs = parsed.data.reverse();
+  } catch (err: any) {
+    console.error(err);
+    error = err.message || "Failed to load Google Sheet";
+  }
+
+  return (
+    <div className="p-8 max-w-6xl mx-auto">
+      <header className="mb-10 flex justify-between items-end">
+        <div>
+          <h1 className="text-3xl font-bold uppercase tracking-tight mb-2">Call Logs</h1>
+          <p className="text-gray-600 dark:text-gray-400">Live data synced from Google Sheets CRM.</p>
+        </div>
+        
+        <div className="flex gap-4">
+          <a 
+            href="https://docs.google.com/spreadsheets/d/1EuYUHCElFWq6AgsA-FWFGfnRCxQTOdKG_73725C0fXg/edit" 
+            target="_blank" 
+            rel="noreferrer"
+            className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors border border-gray-200 dark:border-white/10 text-sm font-medium"
+          >
+            <ExternalLink className="w-4 h-4" /> Open Sheet
+          </a>
+          <button className="flex items-center gap-2 px-4 py-2 bg-mahindra-red text-white hover:bg-mahindra-red-dark transition-colors border border-transparent text-sm font-bold uppercase tracking-widest">
+            <Download className="w-4 h-4" /> Export
+          </button>
+        </div>
+      </header>
+
+      {error ? (
+        <div className="mb-8 p-4 border-l-4 border-red-500 bg-red-500/10 text-red-600 dark:text-red-400 text-sm">
+          <strong className="font-bold">Error Loading Data:</strong> {error}
+        </div>
+      ) : logs.length === 0 ? (
+        <div className="mb-8 p-4 border-l-4 border-blue-500 bg-blue-500/10 text-blue-600 dark:text-blue-400 text-sm">
+          <strong className="font-bold">Info:</strong> Connection successful, but the Google Sheet is currently empty. Waiting for AI calls...
+        </div>
+      ) : (
+        <div className="mb-8 p-4 border-l-4 border-green-500 bg-green-500/10 text-green-700 dark:text-green-300 text-sm flex items-center justify-between">
+          <span><strong className="font-bold">Live:</strong> Successfully syncing {logs.length} records from Google Sheets.</span>
+        </div>
+      )}
+
+      <div className="bg-white dark:bg-mahindra-black border border-gray-200 dark:border-white/10 rounded-sm overflow-hidden shadow-sm">
+        <div className="p-4 border-b border-gray-200 dark:border-white/10 flex gap-4">
+          <div className="relative flex-1">
+            <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
+            <input 
+              type="text" 
+              placeholder="Search records..." 
+              className="w-full bg-gray-50 dark:bg-mahindra-dark border border-gray-200 dark:border-white/10 py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-mahindra-red transition-colors"
+            />
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse min-w-[800px]">
+            <thead>
+              <tr className="border-b border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5">
+                <th className="p-4 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Date</th>
+                <th className="p-4 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Customer Details</th>
+                <th className="p-4 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Vehicle</th>
+                <th className="p-4 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Enquiry</th>
+                <th className="p-4 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Service/Visit</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100 dark:divide-white/5">
+                {logs.map((log, index) => {
+                  // Date Formatting
+                  let displayDate = log["Call Date"] || "-";
+                  if (displayDate !== "-") {
+                    try {
+                      const d = new Date(displayDate);
+                      if (!isNaN(d.getTime())) {
+                        displayDate = d.toLocaleString('en-IN', {
+                          month: 'short', day: 'numeric', year: 'numeric',
+                          hour: '2-digit', minute: '2-digit'
+                        });
+                      }
+                    } catch (e) {}
+                  }
+              
+                  // Enquiry Formatting
+                  let enquiry = log["Enquiry Type"] || "-";
+                  if (enquiry !== "-") enquiry = enquiry.charAt(0).toUpperCase() + enquiry.slice(1).toLowerCase();
+
+                  return (
+                    <tr key={index} className="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group">
+                      <td className="p-4 text-sm text-gray-600 dark:text-gray-300 whitespace-nowrap">
+                        {displayDate}
+                      </td>
+                      <td className="p-4 text-sm">
+                        <div className="font-medium text-gray-900 dark:text-white capitalize">{log["Customer Name"] || "Unknown"}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400 font-mono mt-1 bg-gray-100 dark:bg-white/5 inline-block px-2 py-0.5 rounded-sm border border-gray-200 dark:border-white/10">
+                          ☎ {log["Phone Number"] || "-"}
+                        </div>
+                      </td>
+                      <td className="p-4 text-sm font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide">
+                        {log["Vehicle Model"] || "-"}
+                      </td>
+                      <td className="p-4 text-sm">
+                        <span className="inline-block px-2 py-1 text-xs rounded-sm bg-mahindra-red/10 text-mahindra-red font-semibold">
+                          {enquiry}
+                        </span>
+                      </td>
+                      <td className="p-4 text-sm text-gray-600 dark:text-gray-300">
+                        {log["Service Type"] && log["Service Type"].trim() !== "" ? (
+                          <div className="capitalize font-medium text-gray-900 dark:text-white">{log["Service Type"]}</div>
+                        ) : (
+                          <div className="text-gray-400 dark:text-gray-500 text-xs italic">N/A</div>
+                        )}
+                        {(log["Visit Day"] || log["Visit Time"]) && (
+                          <div className="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-green-500 opacity-80" />
+                            <span className="capitalize">{log["Visit Day"]}</span> {log["Visit Time"] && `at ${log["Visit Time"]}`}
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              {logs.length === 0 && !error && (
+                <tr>
+                  <td colSpan={5} className="p-8 text-center text-gray-500 dark:text-gray-400 text-sm">
+                    No call logs found in the Google Sheet.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+        
+        <div className="p-4 border-t border-gray-200 dark:border-white/10 text-xs text-gray-500 text-center uppercase tracking-widest">
+          {logs.length > 0 ? `Showing ${logs.length} records` : 'End of Results'}
+        </div>
+      </div>
+    </div>
+  );
+}

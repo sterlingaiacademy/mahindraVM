@@ -1,26 +1,59 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #111111;
+  
+  --mahindra-red: #e31837;
+  --mahindra-red-dark: #b3122b;
+  --mahindra-black: #000000;
+  --mahindra-dark: #111111;
+  --mahindra-light: #f5f5f5;
+  --mahindra-gray: #e0e0e0; /* lighter gray for light mode */
+}
+
+.dark {
+  --background: #111111;
+  --foreground: #ffffff;
+  --mahindra-gray: #333333;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-mahindra-red: var(--mahindra-red);
+  --color-mahindra-red-dark: var(--mahindra-red-dark);
+  --color-mahindra-black: var(--mahindra-black);
+  --color-mahindra-dark: var(--mahindra-dark);
+  --color-mahindra-light: var(--mahindra-light);
+  --color-mahindra-gray: var(--mahindra-gray);
+  
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-body {
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--mahindra-red);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--mahindra-red-dark);
 }
