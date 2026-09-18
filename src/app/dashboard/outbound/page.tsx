@@ -51,7 +51,7 @@ export default function OutboundTriggerPage() {
     
     const result = await triggerCall(phone, { 
       customer_name: customerName,
-      vehicle_name: vehicleName,
+      vehicle: vehicleName,
       context: context 
     });
     if (result.success) {
