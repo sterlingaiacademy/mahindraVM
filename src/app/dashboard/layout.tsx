@@ -15,6 +15,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const navItems = [
     { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
     { label: "Call Logs (Sheets)", href: "/dashboard/logs", icon: ScrollText },
+    { label: "Raw Transcripts", href: "/dashboard/transcripts", icon: ScrollText },
     { label: "Outbound Trigger", href: "/dashboard/outbound", icon: PhoneOutgoing },
     { label: "Agent Config", href: "/dashboard/config", icon: Settings },
   ];
