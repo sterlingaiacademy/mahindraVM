@@ -34,6 +34,7 @@ export default function LoginPage() {
     const validPass = process.env.NEXT_PUBLIC_ADMIN_PASS || "mahindra";
 
     if (username === validUser && password === validPass) {
+      document.cookie = "is_admin=true; path=/";
       router.push("/dashboard");
     } else {
       setError(true);
