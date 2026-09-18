@@ -103,20 +103,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             )}
           </div>
           
-          <Link href="/" className={cn(
+          <button onClick={() => { document.cookie = "is_admin=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; window.location.href = "/"; }} className={cn(
             "relative flex items-center transition-colors uppercase tracking-wide group rounded-md", 
             isCollapsed ? "justify-center p-2 hover:bg-black/5 dark:hover:bg-white/10" : "gap-3 text-sm font-medium hover:text-black dark:text-gray-400 dark:hover:text-white"
           )}>
             <LogOut className="w-5 h-5 text-gray-500 hover:text-black dark:hover:text-white" />
-            {!isCollapsed && <span className="text-gray-500 hover:text-black dark:hover:text-white">Exit</span>}
+            {!isCollapsed && <span className="text-gray-500 hover:text-black dark:hover:text-white">Logout</span>}
             
             {isCollapsed && (
               <div className="absolute left-full ml-4 px-3 py-2 top-1/2 -translate-y-1/2 bg-gray-900 dark:bg-white text-white dark:text-black text-xs font-bold rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 whitespace-nowrap shadow-xl">
-                Exit to Landing Page
+                Logout
                 <div className="absolute top-1/2 -translate-y-1/2 -left-1 border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-r-[4px] border-r-gray-900 dark:border-r-white" />
               </div>
             )}
-          </Link>
+          </button>
         </div>
       </aside>
 
