@@ -1,29 +1,33 @@
-import { Activity, Phone, Clock, Users } from "lucide-react";
+import { Activity, Phone, Calendar, Wrench } from "lucide-react";
+import Papa from "papaparse";
 
 export const revalidate = 0; // Disable caching for live data
 
 export default async function DashboardOverview() {
-  const agentId = "agent_2901m2hq57c8ezb8m4w77fep25m6";
-  const apiKey = "sk_b532b75ffacd5be75f04cd9575c426583ef7f0dc79e51812";
-  
-  let agentData = null;
-  let error = null;
-  
+  let totalCalls = 0;
+  let showroomVisits = 0;
+  let serviceBookings = 0;
+  let isOnline = false;
+
   try {
-    const res = await fetch(`https://api.elevenlabs.io/v1/convai/agents/${agentId}`, {
-      headers: {
-        "xi-api-key": apiKey
-      },
-      next: { revalidate: 0 }
-    });
+    const csvUrl = "https://docs.google.com/spreadsheets/d/1EuYUHCElFWq6AgsA-FWFGfnRCxQTOdKG_73725C0fXg/export?format=csv";
+    const res = await fetch(csvUrl, { cache: "no-store" });
     
     if (res.ok) {
-      agentData = await res.json();
-    } else {
-      error = "Failed to fetch agent data. Status: " + res.status;
+      isOnline = true;
+      const csvText = await res.text();
+      const parsed = Papa.parse(csvText, { header: true, skipEmptyLines: true });
+      
+      const logs = parsed.data;
+      totalCalls = logs.length;
+      
+      logs.forEach((log: any) => {
+        if (log["Visit Day"] && log["Visit Day"].trim() !== "") showroomVisits++;
+        if (log["Service Type"] && log["Service Type"].trim() !== "") serviceBookings++;
+      });
     }
-  } catch (e: any) {
-    error = e.message;
+  } catch (e) {
+    console.error("Failed to fetch live stats", e);
   }
 
   return (
@@ -35,10 +39,10 @@ export default async function DashboardOverview() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-        <StatCard title="Total Calls" value="1,248" icon={Phone} trend="+12% this week" />
-        <StatCard title="Avg Duration" value="2m 14s" icon={Clock} trend="-5s this week" />
-        <StatCard title="Leads Captured" value="342" icon={Users} trend="+18% this week" />
-        <StatCard title="System Status" value="Active" icon={Activity} trend="99.9% uptime" isGood />
+        <StatCard title="Total Calls" value={totalCalls} icon={Phone} trend="All time" />
+        <StatCard title="Showroom Visits" value={showroomVisits} icon={Calendar} trend="Booked by AI" />
+        <StatCard title="Service Leads" value={serviceBookings} icon={Wrench} trend="Captured by AI" />
+        <StatCard title="System Status" value={isOnline ? "Active" : "Offline"} icon={Activity} trend="Live Connection" isGood={isOnline} />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
