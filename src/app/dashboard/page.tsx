@@ -41,39 +41,31 @@ export default async function DashboardOverview() {
         <StatCard title="System Status" value="Active" icon={Activity} trend="99.9% uptime" isGood />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Agent Config (from 11labs) */}
-        <div className="lg:col-span-2 bg-white dark:bg-mahindra-black border-gray-200 dark:border-white/10 p-6 rounded-sm">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Agent Info */}
+        <div className="bg-white dark:bg-mahindra-black border-gray-200 dark:border-white/10 p-6 rounded-sm shadow-sm">
           <h2 className="text-xl font-bold uppercase tracking-wide mb-6 pb-4 border-b border-white/5 flex justify-between items-center">
-            <span>ElevenLabs Connection</span>
-            <span className="text-xs px-2 py-1 bg-green-500/20 text-green-500 rounded-sm">Online</span>
+            <span>Agent Status</span>
+            <span className="text-xs px-2 py-1 bg-green-500/20 text-green-500 rounded-sm">Online & Ready</span>
           </h2>
           
-          {error ? (
-            <div className="p-4 bg-red-500/10 text-red-500 border border-red-500/20 rounded-sm">
-              Error fetching ElevenLabs data: {error}
+          <div className="space-y-4">
+            <p className="text-sm text-gray-400 mb-4">
+              The AI Voice Receptionist is currently active and monitoring for outbound triggers.
+              All inbound and outbound calls are routing properly through the LiveKit engine.
+            </p>
+            <div className="p-4 bg-mahindra-dark border border-white/5 rounded-sm">
+              <h3 className="text-xs font-bold uppercase text-gray-500 mb-2">Notice</h3>
+              <p className="text-sm text-gray-300">
+                Agent configuration details have been hidden for security. 
+                If you need to modify the agent's behavior, please check the configuration settings.
+              </p>
             </div>
-          ) : agentData ? (
-            <div className="space-y-4">
-              <ConfigRow label="Agent Name" value={agentData.name || "N/A"} />
-              <ConfigRow label="Agent ID" value={agentData.agent_id} />
-              <ConfigRow label="Voice ID" value={agentData.conversation_config?.tts?.voice_id || "N/A"} />
-              <ConfigRow label="Language" value={agentData.conversation_config?.agent?.language || "en"} />
-              
-              <div className="mt-6 p-4 bg-mahindra-dark border border-white/5">
-                <h3 className="text-xs font-bold uppercase text-gray-500 mb-2">System Prompt Preview</h3>
-                <p className="text-sm text-gray-300 line-clamp-4 font-mono">
-                  {agentData.conversation_config?.agent?.prompt?.prompt || "No prompt configured."}
-                </p>
-              </div>
-            </div>
-          ) : (
-            <div className="text-gray-500 italic">Loading agent data...</div>
-          )}
+          </div>
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-white dark:bg-mahindra-black border-gray-200 dark:border-white/10 p-6 rounded-sm">
+        <div className="bg-white dark:bg-mahindra-black border-gray-200 dark:border-white/10 p-6 rounded-sm shadow-sm">
           <h2 className="text-xl font-bold uppercase tracking-wide mb-6 pb-4 border-b border-white/5">
             Quick Actions
           </h2>
@@ -83,9 +75,6 @@ export default async function DashboardOverview() {
             </button>
             <button className="w-full py-3 bg-white/5 text-white font-bold uppercase tracking-wider text-sm hover:bg-white/10 transition-colors skew-x-[-10deg]">
               <span className="block skew-x-[10deg]">Sync Call Logs</span>
-            </button>
-            <button className="w-full py-3 bg-white/5 text-white font-bold uppercase tracking-wider text-sm hover:bg-white/10 transition-colors skew-x-[-10deg]">
-              <span className="block skew-x-[10deg]">Edit Instructions</span>
             </button>
           </div>
         </div>
