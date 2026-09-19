@@ -27,7 +27,7 @@ export default function LandingPage() {
   
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      setScrolled(window.scrollY > window.innerHeight - 80);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -85,9 +85,6 @@ export default function LandingPage() {
           <VideoBackground videoId="erhORDnwJeQ" opacity="opacity-70" />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black/80 z-10" />
         </motion.div>
-
-        {/* Smooth Gradient Transition Overlay at Bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-gray-50 dark:from-mahindra-dark to-transparent z-10" />
 
         <div className="relative z-20 text-center px-6 max-w-5xl mx-auto mt-20">
           <motion.div
