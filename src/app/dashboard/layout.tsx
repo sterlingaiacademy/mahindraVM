@@ -17,7 +17,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { label: "Call Logs (Sheets)", href: "/dashboard/logs", icon: ScrollText },
     { label: "Raw Transcripts", href: "/dashboard/transcripts", icon: ScrollText },
     { label: "Outbound Trigger", href: "/dashboard/outbound", icon: PhoneOutgoing },
-    { label: "Agent Config", href: "/dashboard/config", icon: Settings },
+    { label: "Account Config", href: "/dashboard/config", icon: Settings },
   ];
 
   return (
