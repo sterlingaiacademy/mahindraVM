@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Loader2 } from "lucide-react";
 
 const videos = [
   "/videos/erhORDnwJeQ.mp4",
@@ -13,10 +13,10 @@ const videos = [
 export default function LoginPage() {
   const [currentVideo, setCurrentVideo] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleVideoEnded = () => {
     setCurrentVideo((prev) => (prev + 1) % videos.length);
@@ -30,14 +30,18 @@ export default function LoginPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+    
     const validUser = process.env.NEXT_PUBLIC_ADMIN_USER || "admin";
     const validPass = process.env.NEXT_PUBLIC_ADMIN_PASS || "mahindra";
 
     if (username === validUser && password === validPass) {
       document.cookie = "is_admin=true; path=/";
-      router.push("/dashboard");
+      // Force a hard redirect so the server middleware picks up the new cookie instantly
+      window.location.href = "/dashboard";
     } else {
       setError(true);
+      setIsLoading(false);
     }
   };
 
@@ -106,11 +110,16 @@ export default function LoginPage() {
 
           <div className="pt-4">
             <button 
-              type="submit" 
-              className="w-full px-6 py-4 bg-mahindra-red text-white font-bold text-sm uppercase tracking-widest hover:bg-[#cc0000] transition-colors skew-x-[-10deg] shadow-lg flex justify-center group"
+              type="submit"
+              disabled={isLoading}
+              className="w-full px-6 py-4 bg-mahindra-red text-white font-bold text-sm uppercase tracking-widest hover:bg-[#cc0000] transition-colors skew-x-[-10deg] shadow-lg flex justify-center group disabled:opacity-75 disabled:cursor-not-allowed"
             >
-              <span className="block skew-x-[10deg] group-hover:scale-105 transition-transform">
-                Secure Login
+              <span className="block skew-x-[10deg] transition-transform flex items-center gap-2">
+                {isLoading ? (
+                  <><Loader2 className="w-5 h-5 animate-spin" /> Authenticating...</>
+                ) : (
+                  "Secure Login"
+                )}
               </span>
             </button>
           </div>
