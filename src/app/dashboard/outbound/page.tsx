@@ -87,23 +87,24 @@ export default function OutboundTriggerPage() {
     if (bulkList.length === 0) return;
     
     setBulkStatus("running");
-    setProgress(0);
     
-    for (let i = 0; i < bulkList.length; i++) {
-      const row = bulkList[i];
-      const phoneNumber = row.phone || row.Phone || row.PHONE || row.phone_number || row.Phone_Number;
-      if (phoneNumber) {
-        const result = await triggerCall(phoneNumber, row);
-        if (!result.success) {
-          console.error(`Failed to call ${phoneNumber}:`, result.error);
-        }
-      }
-      setProgress(i + 1);
-      // 1-second delay between triggering calls
-      await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+      const res = await fetch("/api/outbound/bulk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contacts: bulkList })
+      });
+      
+      if (!res.ok) throw new Error("Failed to start campaign");
+      
+      // Because the server handles the looping now, we can instantly mark it as done locally
+      // (or we can show a special "Running in background" state)
+      setBulkStatus("done");
+      
+    } catch (e) {
+      console.error("Campaign failed to start:", e);
+      setBulkStatus("idle");
     }
-    
-    setBulkStatus("done");
   };
 
   const downloadTemplate = () => {
@@ -281,10 +282,10 @@ export default function OutboundTriggerPage() {
                                 <X className="w-4 h-4" />
                               </button>
                             )}
-                            {bulkStatus === "running" && progress > index && (
+                            {bulkStatus === "done" && (
                               <CheckCircle2 className="w-4 h-4 text-green-500" />
                             )}
-                            {bulkStatus === "running" && progress === index && (
+                            {bulkStatus === "running" && (
                               <Loader2 className="w-4 h-4 text-mahindra-red animate-spin" />
                             )}
                           </div>
@@ -296,17 +297,8 @@ export default function OutboundTriggerPage() {
 
                 <div className="p-4 border-t border-gray-200 dark:border-white/10">
                   {bulkStatus === "running" && (
-                    <div className="mb-4">
-                      <div className="flex justify-between text-xs font-bold uppercase text-gray-500 mb-2">
-                        <span>Progress</span>
-                        <span>{progress} / {bulkList.length}</span>
-                      </div>
-                      <div className="w-full bg-gray-200 dark:bg-white/10 h-2 rounded-full overflow-hidden">
-                        <div 
-                          className="bg-mahindra-red h-full transition-all duration-300"
-                          style={{ width: `${(progress / bulkList.length) * 100}%` }}
-                        ></div>
-                      </div>
+                    <div className="p-3 bg-gray-100 dark:bg-white/5 text-gray-500 text-sm font-bold flex items-center justify-center gap-2 rounded-sm">
+                      <Loader2 className="w-4 h-4 animate-spin" /> Dispatching to Server...
                     </div>
                   )}
                   
@@ -315,13 +307,18 @@ export default function OutboundTriggerPage() {
                       onClick={startBulkCampaign}
                       className="w-full py-3 bg-mahindra-red text-white font-bold uppercase tracking-wider text-xs hover:bg-[#cc0000] transition-colors flex justify-center items-center gap-2 shadow-md rounded-sm"
                     >
-                      <Play className="w-4 h-4 fill-current" /> Start Campaign
+                      <Play className="w-4 h-4 fill-current" /> Start Background Campaign
                     </button>
                   )}
                   
                   {bulkStatus === "done" && (
-                    <div className="p-3 bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20 text-green-700 dark:text-green-400 text-sm font-bold flex items-center justify-center gap-2 rounded-sm">
-                      <CheckCircle2 className="w-4 h-4" /> Campaign Complete
+                    <div className="p-4 bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20 rounded-sm">
+                      <div className="text-green-700 dark:text-green-400 text-sm font-bold flex items-center justify-center gap-2 mb-1">
+                        <CheckCircle2 className="w-4 h-4" /> Dispatched Successfully
+                      </div>
+                      <p className="text-xs text-center text-green-600/80 dark:text-green-400/80">
+                        The server is now handling the 1-second delay loop in the background. You can safely close this tab or log out.
+                      </p>
                     </div>
                   )}
                 </div>
