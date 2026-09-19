@@ -53,24 +53,20 @@ export default function LandingPage() {
     <div className="bg-background text-foreground min-h-screen font-sans selection:bg-mahindra-red selection:text-white transition-colors duration-300" ref={containerRef}>
       
       {/* Navigation */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 transition-all duration-300 pointer-events-none ${
-        scrolled ? 'py-4 bg-white/95 dark:bg-mahindra-black/95 backdrop-blur-md shadow-sm border-b border-gray-200 dark:border-white/10' : 'py-6 bg-transparent'
+      <nav className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 transition-all duration-500 pointer-events-none ${
+        scrolled ? 'py-4 bg-white/70 dark:bg-black/40 backdrop-blur-lg shadow-sm border-b border-gray-200 dark:border-white/5' : 'py-6 bg-transparent'
       }`}>
         <div className="flex items-center gap-3 pointer-events-auto">
           {/* Always white when at top. When scrolled, hide in light mode, show in dark mode */}
           <img src="/logo_dark.png" alt="Mahindra Logo" className={`h-[60px] md:h-[70px] w-auto object-contain transition-all drop-shadow-md ${scrolled ? 'hidden dark:block' : 'block'}`} />
-          {/* Only show when scrolled AND in light mode */}
           <img src="/logo_transparent.png" alt="Mahindra Logo" className={`h-[60px] md:h-[70px] w-auto object-contain transition-all ${scrolled ? 'block dark:hidden' : 'hidden'}`} />
         </div>
-        <div className={`flex gap-6 items-center pointer-events-auto transition-colors ${
-          scrolled ? 'text-gray-900 dark:text-white' : 'text-white drop-shadow-md'
-        }`}>
-          <Link href="#features" className={`text-sm font-bold transition-colors uppercase tracking-widest hidden md:block ${
-            scrolled ? 'hover:text-mahindra-red' : 'hover:text-gray-300'
-          }`}>Features</Link>
-          <Link href="#call-flow" className={`text-sm font-bold transition-colors uppercase tracking-widest hidden md:block ${
-            scrolled ? 'hover:text-mahindra-red' : 'hover:text-gray-300'
-          }`}>Call Flow</Link>
+
+        <div className="flex items-center gap-6 pointer-events-auto">
+          <div className="hidden md:flex gap-8 mr-4 text-xs font-bold tracking-widest uppercase">
+            <Link href="#features" className={`transition-colors ${scrolled ? 'text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white' : 'text-white/80 hover:text-white'}`}>Features</Link>
+            <Link href="#call-flow" className={`transition-colors ${scrolled ? 'text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white' : 'text-white/80 hover:text-white'}`}>Call Flow</Link>
+          </div>
           
           <ThemeToggle />
           
@@ -87,8 +83,11 @@ export default function LandingPage() {
           className="absolute inset-0 z-0 bg-black"
         >
           <VideoBackground videoId="erhORDnwJeQ" opacity="opacity-70" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-mahindra-dark/80 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black/80 z-10" />
         </motion.div>
+
+        {/* Smooth Gradient Transition Overlay at Bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-gray-50 dark:from-mahindra-dark to-transparent z-10" />
 
         <div className="relative z-20 text-center px-6 max-w-5xl mx-auto mt-20">
           <motion.div
