@@ -117,7 +117,10 @@ export default function LandingPage() {
 
       {/* Features Grid */}
       <section id="features" className="py-24 bg-gray-50 dark:bg-mahindra-dark relative z-20">
-        <div className="max-w-7xl mx-auto px-6 md:px-16">
+        {/* Smooth Gradient Transition from the Black Hero Video above */}
+        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black to-transparent opacity-100 pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto px-6 md:px-16 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <FeatureCard 
               icon={<PhoneCall className="w-8 h-8 text-mahindra-red" />}
@@ -269,10 +272,13 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Footer - With Third YouTube Video */}
-      <footer className="py-32 bg-black border-t border-white/10 text-center relative overflow-hidden">
+      <footer className="py-32 bg-black text-center relative overflow-hidden">
+        {/* Smooth Gradient Transition from the section above */}
+        <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-gray-50 dark:from-mahindra-dark to-transparent z-20 pointer-events-none" />
+        
         <VideoBackground videoId="Kne9fiwdxpk" opacity="opacity-40" />
         <div className="absolute inset-0 bg-mahindra-black/60 z-10" />
-        <div className="relative z-20 max-w-3xl mx-auto px-6">
+        <div className="relative z-30 max-w-3xl mx-auto px-6">
           <h2 className="text-3xl md:text-5xl font-bold uppercase tracking-tighter mb-6 text-white drop-shadow-md">Experience the AI Voice Agent</h2>
           <p className="text-gray-300 text-lg mb-10 drop-shadow-md">Access the admin dashboard to monitor live calls, view analytics, and trigger outbound interactions.</p>
           <Link href="/dashboard" className="inline-flex items-center gap-2 px-10 py-5 bg-mahindra-red text-white font-bold text-lg uppercase tracking-widest hover:bg-mahindra-red-dark transition-colors skew-x-[-10deg] shadow-2xl">
