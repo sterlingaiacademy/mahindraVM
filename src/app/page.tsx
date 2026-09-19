@@ -53,24 +53,24 @@ export default function LandingPage() {
     <div className="bg-background text-foreground min-h-screen font-sans selection:bg-mahindra-red selection:text-white transition-colors duration-300" ref={containerRef}>
       
       {/* Navigation */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 transition-all duration-500 pointer-events-none ${
-        scrolled ? 'py-4 bg-white/70 dark:bg-black/40 backdrop-blur-lg shadow-sm border-b border-gray-200 dark:border-white/5' : 'py-6 bg-transparent'
+      <nav className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-8 transition-all duration-500 pointer-events-none ${
+        scrolled ? 'py-3 md:py-4 bg-white/70 dark:bg-black/40 backdrop-blur-lg shadow-sm border-b border-gray-200 dark:border-white/5' : 'py-4 md:py-6 bg-transparent'
       }`}>
         <div className="flex items-center gap-3 pointer-events-auto">
           {/* Always white when at top. When scrolled, hide in light mode, show in dark mode */}
-          <img src="/logo_dark.png" alt="Mahindra Logo" className={`h-[60px] md:h-[70px] w-auto object-contain transition-all drop-shadow-md ${scrolled ? 'hidden dark:block' : 'block'}`} />
-          <img src="/logo_transparent.png" alt="Mahindra Logo" className={`h-[60px] md:h-[70px] w-auto object-contain transition-all ${scrolled ? 'block dark:hidden' : 'hidden'}`} />
+          <img src="/logo_dark.png" alt="Mahindra Logo" className={`h-[40px] md:h-[60px] w-auto object-contain transition-all drop-shadow-md ${scrolled ? 'hidden dark:block' : 'block'}`} />
+          <img src="/logo_transparent.png" alt="Mahindra Logo" className={`h-[40px] md:h-[60px] w-auto object-contain transition-all ${scrolled ? 'block dark:hidden' : 'hidden'}`} />
         </div>
 
-        <div className="flex items-center gap-6 pointer-events-auto">
-          <div className="hidden md:flex gap-8 mr-4 text-xs font-bold tracking-widest uppercase">
+        <div className="flex items-center gap-4 md:gap-6 pointer-events-auto">
+          <div className="hidden lg:flex gap-8 mr-4 text-xs font-bold tracking-widest uppercase">
             <Link href="#features" className={`transition-colors ${scrolled ? 'text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white' : 'text-white/80 hover:text-white'}`}>Features</Link>
             <Link href="#call-flow" className={`transition-colors ${scrolled ? 'text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white' : 'text-white/80 hover:text-white'}`}>Call Flow</Link>
           </div>
           
           <ThemeToggle />
           
-          <Link href="/login" className="px-6 py-2 bg-mahindra-red text-white font-bold text-sm uppercase tracking-widest hover:bg-mahindra-red-dark transition-colors skew-x-[-10deg] shadow-lg border border-transparent">
+          <Link href="/login" className="px-4 md:px-6 py-2 bg-mahindra-red text-white font-bold text-[10px] md:text-sm uppercase tracking-widest hover:bg-mahindra-red-dark transition-colors skew-x-[-10deg] shadow-lg border border-transparent">
             <span className="block skew-x-[10deg]">Admin Login</span>
           </Link>
         </div>
@@ -86,42 +86,41 @@ export default function LandingPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black/80 z-10" />
         </motion.div>
 
-        <div className="relative z-20 text-center px-6 max-w-5xl mx-auto mt-20">
+        <div className="relative z-20 text-center px-4 md:px-6 max-w-5xl mx-auto mt-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-5xl md:text-7xl font-bold uppercase tracking-tighter mb-6 text-white drop-shadow-lg">
+            <h1 className="text-4xl md:text-7xl font-bold uppercase tracking-tighter mb-4 md:mb-6 text-white drop-shadow-lg">
               24/7 Intelligent <br/>
               <span className="text-mahindra-red">Voice Receptionist</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-200 mb-10 max-w-3xl mx-auto font-light drop-shadow-md">
+            <p className="text-lg md:text-2xl text-gray-200 mb-8 md:mb-10 max-w-3xl mx-auto font-light drop-shadow-md">
               Never miss a customer call, never lose a potential lead, and provide consistent customer service around the clock for your dealership.
             </p>
             <Link 
               href="#features" 
-              className="inline-flex items-center gap-2 px-8 py-4 bg-white text-mahindra-black font-bold uppercase tracking-widest hover:bg-mahindra-red hover:text-white transition-colors skew-x-[-10deg] shadow-2xl group"
+              className="inline-flex items-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-white text-mahindra-black font-bold uppercase tracking-widest hover:bg-mahindra-red hover:text-white transition-colors skew-x-[-10deg] shadow-2xl group text-xs md:text-base"
             >
               <span className="block skew-x-[10deg]">Explore Capabilities</span>
-              <ArrowRight className="w-5 h-5 skew-x-[10deg] group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-4 h-4 md:w-5 md:h-5 skew-x-[10deg] group-hover:translate-x-1 transition-transform" />
             </Link>
           </motion.div>
         </div>
 
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center opacity-70">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-white mb-4">Scroll to explore</span>
-          <div className="w-px h-16 bg-gradient-to-b from-white to-mahindra-red" />
+          <span className="text-[10px] uppercase tracking-[0.3em] text-white mb-4">Scroll</span>
         </div>
       </section>
 
       {/* Features Grid */}
-      <section id="features" className="py-24 bg-gray-50 dark:bg-mahindra-dark relative z-20">
+      <section id="features" className="py-16 md:py-24 bg-gray-50 dark:bg-mahindra-dark relative z-20">
         {/* Smooth Gradient Transition from the Black Hero Video above */}
         <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black to-transparent opacity-100 pointer-events-none" />
         
-        <div className="max-w-7xl mx-auto px-6 md:px-16 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="max-w-7xl mx-auto px-4 md:px-16 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             <FeatureCard 
               icon={<PhoneCall className="w-8 h-8 text-mahindra-red" />}
               title="24/7 Inbound Reception"
@@ -269,13 +268,13 @@ export default function LandingPage() {
              </div>
           </div>
         </div>
+
+        {/* Smooth Fade to Black before the Footer Video */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-black pointer-events-none" />
       </section>
 
       {/* CTA Footer - With Third YouTube Video */}
       <footer className="py-32 bg-black text-center relative overflow-hidden">
-        {/* Smooth Gradient Transition from the section above */}
-        <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-gray-50 dark:from-mahindra-dark to-transparent z-20 pointer-events-none" />
-        
         <VideoBackground videoId="Kne9fiwdxpk" opacity="opacity-40" />
         <div className="absolute inset-0 bg-mahindra-black/60 z-10" />
         <div className="relative z-30 max-w-3xl mx-auto px-6">
