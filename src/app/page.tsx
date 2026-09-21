@@ -116,9 +116,6 @@ export default function LandingPage() {
 
       {/* Features Grid */}
       <section id="features" className="py-16 md:py-24 bg-gray-50 dark:bg-mahindra-dark relative z-20">
-        {/* Smooth Gradient Transition from the Black Hero Video above */}
-        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black to-transparent opacity-100 pointer-events-none" />
-        
         <div className="max-w-7xl mx-auto px-4 md:px-16 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             <FeatureCard 
@@ -268,9 +265,6 @@ export default function LandingPage() {
              </div>
           </div>
         </div>
-
-        {/* Smooth Fade to Black before the Footer Video */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-black pointer-events-none" />
       </section>
 
       {/* CTA Footer - With Third YouTube Video */}
