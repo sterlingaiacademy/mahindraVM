@@ -37,16 +37,11 @@ async function processBulkCampaign(contacts: any[]) {
     
     if (phoneNumber) {
       phoneNumber = String(phoneNumber).trim();
-      if (/^\d{10}$/.test(phoneNumber)) {
-        phoneNumber = `+91${phoneNumber}`;
-      } else if (phoneNumber.startsWith('91') && phoneNumber.length === 12) {
-        phoneNumber = `+${phoneNumber}`;
-      }
 
       const payload = {
         phone: phoneNumber,
         agent_id: "agent_1201m313x98jenasy4knjk1hme5q",
-        dynamic_variables: row
+        conversation_variables: row
       };
 
       try {

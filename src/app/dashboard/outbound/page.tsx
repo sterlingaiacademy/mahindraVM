@@ -20,21 +20,13 @@ export default function OutboundTriggerPage() {
 
   const triggerCall = async (phoneNumber: string, contextData: any = {}) => {
     try {
-      // Ensure E.164 format for Indian numbers if they just typed 10 digits
-      let formattedPhone = phoneNumber.trim();
-      if (/^\d{10}$/.test(formattedPhone)) {
-        formattedPhone = `+91${formattedPhone}`;
-      } else if (formattedPhone.startsWith('91') && formattedPhone.length === 12) {
-        formattedPhone = `+${formattedPhone}`;
-      }
-
       const res = await fetch("/api/outbound", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          phone: formattedPhone,
+          phone: phoneNumber.trim(),
           agent_id: "agent_1201m313x98jenasy4knjk1hme5q",
-          dynamic_variables: contextData
+          conversation_variables: contextData
         })
       });
       
