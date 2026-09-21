@@ -50,8 +50,15 @@ export default function LandingPage() {
   const opacityHero = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
   return (
-    <div className="bg-background text-foreground min-h-screen font-sans selection:bg-mahindra-red selection:text-white transition-colors duration-300" ref={containerRef}>
+    <div className="bg-transparent text-foreground min-h-screen font-sans selection:bg-mahindra-red selection:text-white transition-colors duration-300" ref={containerRef}>
       
+      {/* iOS Glassmorphism Fixed Background */}
+      <div className="fixed inset-0 z-0 overflow-hidden bg-slate-50 dark:bg-zinc-950 transition-colors duration-500 pointer-events-none">
+        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-mahindra-red/20 dark:bg-mahindra-red/20 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen animate-pulse" style={{ animationDuration: '12s' }} />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[70%] h-[70%] bg-rose-400/20 dark:bg-rose-900/20 blur-[140px] rounded-full mix-blend-multiply dark:mix-blend-screen animate-pulse" style={{ animationDuration: '15s', animationDelay: '2s' }} />
+        <div className="absolute top-[40%] right-[10%] w-[40%] h-[40%] bg-orange-400/10 dark:bg-orange-800/20 blur-[100px] rounded-full mix-blend-multiply dark:mix-blend-screen animate-pulse" style={{ animationDuration: '10s', animationDelay: '5s' }} />
+      </div>
+
       {/* Navigation */}
       <nav className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-8 transition-all duration-500 pointer-events-none ${
         scrolled ? 'py-3 md:py-4 bg-white/70 dark:bg-black/40 backdrop-blur-lg shadow-sm border-b border-gray-200 dark:border-white/5' : 'py-4 md:py-6 bg-transparent'
@@ -116,7 +123,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features Grid */}
-      <section id="features" className="py-16 md:py-24 bg-gray-50 dark:bg-mahindra-dark relative z-20">
+      <section id="features" className="py-16 md:py-24 bg-transparent relative z-20">
         <div className="max-w-7xl mx-auto px-4 md:px-16 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             <FeatureCard 
@@ -154,7 +161,7 @@ export default function LandingPage() {
       </section>
 
       {/* Deep Dive Section - With Second YouTube Video */}
-      <section className="py-24 bg-white dark:bg-mahindra-black relative z-20 overflow-hidden">
+      <section className="py-24 bg-transparent relative z-20 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 md:px-16 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
@@ -193,11 +200,11 @@ export default function LandingPage() {
              <motion.div 
                animate={{ y: [0, -10, 0] }}
                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-               className="absolute -left-6 md:-left-10 top-1/4 bg-white dark:bg-mahindra-dark border border-gray-100 dark:border-white/10 p-5 rounded-xl shadow-xl z-20 w-64 md:w-72"
+               className="absolute -left-6 md:-left-10 top-1/4 bg-white/60 dark:bg-black/60 backdrop-blur-2xl border border-white/50 dark:border-white/10 p-5 rounded-2xl shadow-2xl z-20 w-64 md:w-72"
              >
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                  <span className="text-xs uppercase font-bold text-gray-400">Live Call</span>
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]" />
+                  <span className="text-xs uppercase font-bold text-gray-600 dark:text-gray-300">Live Call</span>
                 </div>
                 <div className="h-10 flex items-center">
                   <motion.p 
@@ -215,7 +222,7 @@ export default function LandingPage() {
              <motion.div 
                animate={{ y: [0, 10, 0] }}
                transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
-               className="absolute -right-6 md:-right-10 bottom-1/4 bg-mahindra-red p-5 rounded-xl shadow-xl z-20 w-56 text-white"
+               className="absolute -right-6 md:-right-10 bottom-1/4 bg-mahindra-red/80 backdrop-blur-2xl border border-white/20 p-5 rounded-2xl shadow-2xl z-20 w-56 text-white"
              >
                 <div className="text-[10px] font-bold tracking-widest uppercase mb-1 opacity-80">CRM Updated</div>
                 <motion.div
@@ -232,13 +239,13 @@ export default function LandingPage() {
       </section>
 
       {/* Proposed Call Flow */}
-      <section id="call-flow" className="py-32 bg-gray-50 dark:bg-mahindra-dark relative z-20">
+      <section id="call-flow" className="py-32 bg-transparent relative z-20">
         <div className="max-w-7xl mx-auto px-6 md:px-16 text-center mb-20">
           <h2 className="text-3xl md:text-5xl font-bold uppercase tracking-tighter">Proposed <span className="text-mahindra-red">Call Flow</span></h2>
         </div>
         
         <div className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16">
-          <div className="bg-white dark:bg-mahindra-black border border-gray-200 dark:border-white/5 p-8 relative shadow-sm">
+          <div className="bg-white/30 dark:bg-black/30 backdrop-blur-2xl border border-white/40 dark:border-white/10 p-8 relative shadow-2xl rounded-2xl overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-mahindra-red to-transparent" />
             <h3 className="text-2xl font-bold uppercase tracking-widest mb-10 text-center text-mahindra-red">Inbound</h3>
             <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-mahindra-red before:via-mahindra-red/50 before:to-transparent">
@@ -252,7 +259,7 @@ export default function LandingPage() {
             </div>
           </div>
           
-          <div className="bg-white dark:bg-mahindra-black border border-gray-200 dark:border-white/5 p-8 relative shadow-sm">
+          <div className="bg-white/30 dark:bg-black/30 backdrop-blur-2xl border border-white/40 dark:border-white/10 p-8 relative shadow-2xl rounded-2xl overflow-hidden">
              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-mahindra-red to-transparent" />
              <h3 className="text-2xl font-bold uppercase tracking-widest mb-10 text-center text-mahindra-red">Outbound</h3>
              <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-mahindra-red before:via-mahindra-red/50 before:to-transparent">
@@ -269,9 +276,9 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Footer - With Third YouTube Video */}
-      <footer className="py-32 bg-black text-center relative overflow-hidden">
+      <footer className="py-32 bg-transparent text-center relative overflow-hidden">
         <VideoBackground videoId="Kne9fiwdxpk" opacity="opacity-40" />
-        <div className="absolute inset-0 bg-mahindra-black/60 z-10" />
+        <div className="absolute inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-sm z-10" />
         <div className="relative z-30 max-w-3xl mx-auto px-6">
           <h2 className="text-3xl md:text-5xl font-bold uppercase tracking-tighter mb-6 text-white drop-shadow-md">Experience the AI Voice Agent</h2>
           <p className="text-gray-300 text-lg mb-10 drop-shadow-md">Access the admin dashboard to monitor live calls, view analytics, and trigger outbound interactions.</p>
@@ -290,7 +297,7 @@ function FeatureCard({ icon, title, description }: { icon: React.ReactNode, titl
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      className="bg-white dark:bg-mahindra-black p-8 border border-gray-200 dark:border-white/5 hover:border-mahindra-red/30 transition-colors group relative overflow-hidden"
+      className="bg-white/40 dark:bg-black/40 backdrop-blur-xl p-8 border border-white/40 dark:border-white/10 hover:border-mahindra-red/50 shadow-xl transition-all duration-300 group relative overflow-hidden rounded-2xl"
     >
       <div className="mb-6 bg-gray-100 dark:bg-white/5 w-16 h-16 flex items-center justify-center group-hover:bg-mahindra-red/10 transition-colors relative z-10">
         {icon}
@@ -304,9 +311,9 @@ function FeatureCard({ icon, title, description }: { icon: React.ReactNode, titl
 function FlowStep({ title, isLast = false }: { title: string, isLast?: boolean }) {
   return (
     <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active z-10">
-      <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-gray-100 dark:border-mahindra-black bg-mahindra-red text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-20" />
-      <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white dark:bg-mahindra-dark p-4 border border-gray-200 dark:border-white/5 group-hover:border-mahindra-red/50 transition-colors">
-        <h4 className="font-bold text-sm uppercase tracking-wide text-gray-800 dark:text-gray-200">{title}</h4>
+      <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white/50 dark:border-white/10 bg-mahindra-red text-white shadow-lg shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-20 backdrop-blur-md" />
+      <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white/40 dark:bg-black/40 backdrop-blur-md p-4 border border-white/50 dark:border-white/10 group-hover:border-mahindra-red/50 transition-all duration-300 rounded-xl shadow-md hover:shadow-xl">
+        <h4 className="font-bold text-sm uppercase tracking-wide text-gray-900 dark:text-white">{title}</h4>
       </div>
     </div>
   );
