@@ -6,6 +6,11 @@ export async function POST(req: Request) {
   try {
     const data = await req.json();
     
+    // Inject Outbound direction explicitly for the Google Sheet data collection
+    if (!data.conversation_variables) data.conversation_variables = {};
+    data.conversation_variables.Direction = "Outbound";
+    data.conversation_variables.direction = "Outbound";
+
     // Pass the request directly to the Python server running on GCP
     const response = await fetch(PYTHON_SERVER_URL, {
       method: 'POST',
