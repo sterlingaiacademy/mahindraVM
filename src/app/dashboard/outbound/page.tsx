@@ -26,7 +26,7 @@ export default function OutboundTriggerPage() {
         body: JSON.stringify({
           phone: phoneNumber,
           agent_id: "agent_2901m2hq57c8ezb8m4w77fep25m6",
-          conversation_variables: contextData
+          dynamic_variables: contextData
         })
       });
       

@@ -39,7 +39,7 @@ async function processBulkCampaign(contacts: any[]) {
       const payload = {
         phone: phoneNumber,
         agent_id: "agent_2901m2hq57c8ezb8m4w77fep25m6",
-        conversation_variables: row
+        dynamic_variables: row
       };
 
       try {
