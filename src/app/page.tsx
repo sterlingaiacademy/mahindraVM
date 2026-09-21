@@ -276,9 +276,9 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Footer - With Third YouTube Video */}
-      <footer className="py-32 bg-transparent text-center relative overflow-hidden">
+      <footer className="py-32 bg-black text-center relative overflow-hidden z-20">
         <VideoBackground videoId="Kne9fiwdxpk" opacity="opacity-40" />
-        <div className="absolute inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-sm z-10" />
+        <div className="absolute inset-0 bg-mahindra-black/60 z-10" />
         <div className="relative z-30 max-w-3xl mx-auto px-6">
           <h2 className="text-3xl md:text-5xl font-bold uppercase tracking-tighter mb-6 text-white drop-shadow-md">Experience the AI Voice Agent</h2>
           <p className="text-gray-300 text-lg mb-10 drop-shadow-md">Access the admin dashboard to monitor live calls, view analytics, and trigger outbound interactions.</p>
