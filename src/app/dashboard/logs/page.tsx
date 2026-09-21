@@ -1,4 +1,4 @@
-import { Search, Download, Filter, ExternalLink } from "lucide-react";
+import { Search, Download, Filter, ExternalLink, PhoneIncoming, PhoneOutgoing } from "lucide-react";
 import Papa from "papaparse";
 
 export const revalidate = 0;
@@ -79,6 +79,7 @@ export default async function CallLogsPage() {
             <thead>
               <tr className="border-b border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5">
                 <th className="p-4 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Date</th>
+                <th className="p-4 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Direction</th>
                 <th className="p-4 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Customer Details</th>
                 <th className="p-4 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Vehicle</th>
                 <th className="p-4 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Enquiry</th>
@@ -105,15 +106,25 @@ export default async function CallLogsPage() {
                   let enquiry = log["Enquiry Type"] || "-";
                   if (enquiry !== "-") enquiry = enquiry.charAt(0).toUpperCase() + enquiry.slice(1).toLowerCase();
 
+                  // Direction Formatting
+                  let direction = log["Direction"] || log["Type"] || log["Call Type"] || "Inbound";
+                  const isOutbound = direction.toLowerCase().includes("outbound");
+
                   return (
                     <tr key={index} className="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group">
                       <td className="p-4 text-sm text-gray-600 dark:text-gray-300 whitespace-nowrap">
                         {displayDate}
                       </td>
+                      <td className="p-4">
+                        <span className={`inline-flex items-center gap-1.5 px-2 py-1 text-[10px] font-bold uppercase tracking-wider rounded-sm ${isOutbound ? 'bg-blue-500/10 text-blue-500 dark:text-blue-400' : 'bg-green-500/10 text-green-600 dark:text-green-400'}`}>
+                          {isOutbound ? <PhoneOutgoing className="w-3 h-3" /> : <PhoneIncoming className="w-3 h-3" />}
+                          {direction}
+                        </span>
+                      </td>
                       <td className="p-4 text-sm">
                         <div className="font-medium text-gray-900 dark:text-white capitalize">{log["Customer Name"] || "Unknown"}</div>
                         <div className="text-xs text-gray-500 dark:text-gray-400 font-mono mt-1 bg-gray-100 dark:bg-white/5 inline-block px-2 py-0.5 rounded-sm border border-gray-200 dark:border-white/10">
-                          ☎ {log["Phone Number"] || "-"}
+                          📞 {log["Phone Number"] || "-"}
                         </div>
                       </td>
                       <td className="p-4 text-sm font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide">
@@ -158,3 +169,4 @@ export default async function CallLogsPage() {
     </div>
   );
 }
+
