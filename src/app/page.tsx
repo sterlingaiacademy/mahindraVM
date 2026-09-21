@@ -58,8 +58,8 @@ export default function LandingPage() {
       }`}>
         <div className="flex items-center gap-3 pointer-events-auto">
           {/* Always white when at top. When scrolled, hide in light mode, show in dark mode */}
-          <img src="/logo_dark.png" alt="Mahindra Logo" className={`h-[40px] md:h-[60px] w-auto object-contain transition-all drop-shadow-md ${scrolled ? 'hidden dark:block' : 'block'}`} />
-          <img src="/logo_transparent.png" alt="Mahindra Logo" className={`h-[40px] md:h-[60px] w-auto object-contain transition-all ${scrolled ? 'block dark:hidden' : 'hidden'}`} />
+          <img src="/logo_dark.png" alt="Mahindra Logo" className={`h-[60px] md:h-[85px] w-auto object-contain transition-all drop-shadow-md ${scrolled ? 'hidden dark:block' : 'block'}`} />
+          <img src="/logo_transparent.png" alt="Mahindra Logo" className={`h-[60px] md:h-[85px] w-auto object-contain transition-all ${scrolled ? 'block dark:hidden' : 'hidden'}`} />
         </div>
 
         <div className="flex items-center gap-4 md:gap-6 pointer-events-auto">
