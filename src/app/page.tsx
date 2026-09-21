@@ -110,7 +110,8 @@ export default function LandingPage() {
         </div>
 
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center opacity-70">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-white mb-4">Scroll</span>
+          <span className="text-[10px] uppercase tracking-[0.3em] text-white mb-4">Scroll to explore</span>
+          <div className="w-px h-16 bg-gradient-to-b from-white to-mahindra-red" />
         </div>
       </section>
 
