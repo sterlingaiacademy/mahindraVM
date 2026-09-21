@@ -42,18 +42,10 @@ export function LogsTableClient({ initialLogs, error }: { initialLogs: any[], er
       <header className="mb-10 flex justify-between items-end">
         <div>
           <h1 className="text-3xl font-bold uppercase tracking-tight mb-2">Call Logs</h1>
-          <p className="text-gray-600 dark:text-gray-400">Live data synced from Google Sheets CRM.</p>
+          <p className="text-gray-600 dark:text-gray-400">Live data synced securely from ElevenLabs API.</p>
         </div>
         
         <div className="flex gap-4">
-          <a 
-            href="https://docs.google.com/spreadsheets/d/1EuYUHCElFWq6AgsA-FWFGfnRCxQTOdKG_73725C0fXg/edit" 
-            target="_blank" 
-            rel="noreferrer"
-            className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors border border-gray-200 dark:border-white/10 text-sm font-medium"
-          >
-            <ExternalLink className="w-4 h-4" /> Open Sheet
-          </a>
           <button className="flex items-center gap-2 px-4 py-2 bg-mahindra-red text-white hover:bg-mahindra-red-dark transition-colors border border-transparent text-sm font-bold uppercase tracking-widest">
             <Download className="w-4 h-4" /> Export
           </button>
@@ -66,11 +58,11 @@ export function LogsTableClient({ initialLogs, error }: { initialLogs: any[], er
         </div>
       ) : initialLogs.length === 0 ? (
         <div className="mb-8 p-4 border-l-4 border-blue-500 bg-blue-500/10 text-blue-600 dark:text-blue-400 text-sm">
-          <strong className="font-bold">Info:</strong> Connection successful, but the Google Sheet is currently empty. Waiting for AI calls...
+          <strong className="font-bold">Info:</strong> Connection successful, but no call logs match your Data Collection. Waiting for AI calls...
         </div>
       ) : (
         <div className="mb-8 p-4 border-l-4 border-green-500 bg-green-500/10 text-green-700 dark:text-green-300 text-sm flex items-center justify-between">
-          <span><strong className="font-bold">Live:</strong> Successfully syncing {initialLogs.length} records from Google Sheets.</span>
+          <span><strong className="font-bold">Live:</strong> Successfully syncing {initialLogs.length} records from ElevenLabs.</span>
         </div>
       )}
 
