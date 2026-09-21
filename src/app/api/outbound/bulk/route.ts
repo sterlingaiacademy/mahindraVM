@@ -38,7 +38,7 @@ async function processBulkCampaign(contacts: any[]) {
     if (phoneNumber) {
       const payload = {
         phone: phoneNumber,
-        agent_id: "agent_2901m2hq57c8ezb8m4w77fep25m6",
+        agent_id: "agent_1201m313x98jenasy4knjk1hme5q",
         dynamic_variables: row
       };
 

@@ -10,7 +10,7 @@ export async function GET(
     return new NextResponse("Missing conversation ID", { status: 400 });
   }
 
-  const apiKey = "sk_b532b75ffacd5be75f04cd9575c426583ef7f0dc79e51812";
+  const apiKey = "sk_c86898a6cdbb6520c0af7f74c198f9a1260111d1ad4d2967";
   
   try {
     const response = await fetch(`https://api.elevenlabs.io/v1/convai/conversations/${id}/audio`, {

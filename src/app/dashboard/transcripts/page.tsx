@@ -1,8 +1,8 @@
 import { Search, Mic, PhoneCall, CheckCircle2, XCircle } from "lucide-react";
 import Link from "next/link";
 
-const API_KEY = "sk_b532b75ffacd5be75f04cd9575c426583ef7f0dc79e51812";
-const AGENT_ID = "agent_2901m2hq57c8ezb8m4w77fep25m6";
+const API_KEY = "sk_c86898a6cdbb6520c0af7f74c198f9a1260111d1ad4d2967";
+const AGENT_ID = "agent_1201m313x98jenasy4knjk1hme5q";
 
 export const revalidate = 0; // Disable caching
 

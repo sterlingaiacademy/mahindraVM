@@ -28,18 +28,26 @@ export default function LoginPage() {
     }
   }, [currentVideo]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    const validUser = process.env.NEXT_PUBLIC_ADMIN_USER || "admin";
-    const validPass = process.env.NEXT_PUBLIC_ADMIN_PASS || "mahindra";
-
-    if (username === validUser && password === validPass) {
-      document.cookie = "is_admin=true; path=/";
-      // Force a hard redirect so the server middleware picks up the new cookie instantly
-      window.location.href = "/dashboard";
-    } else {
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
+      
+      if (res.ok) {
+        document.cookie = "is_admin=true; path=/";
+        // Force a hard redirect so the server middleware picks up the new cookie instantly
+        window.location.href = "/dashboard";
+      } else {
+        setError(true);
+        setIsLoading(false);
+      }
+    } catch (e) {
       setError(true);
       setIsLoading(false);
     }
