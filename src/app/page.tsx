@@ -68,7 +68,7 @@ export default function LandingPage() {
             <Link href="#call-flow" className={`transition-colors ${scrolled ? 'text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white' : 'text-white/80 hover:text-white'}`}>Call Flow</Link>
           </div>
           
-          <ThemeToggle />
+          <ThemeToggle className={scrolled ? "text-gray-800 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10" : "text-white hover:bg-white/20"} />
           
           <Link href="/login" className="px-4 md:px-6 py-2 bg-mahindra-red text-white font-bold text-[10px] md:text-sm uppercase tracking-widest hover:bg-mahindra-red-dark transition-colors skew-x-[-10deg] shadow-lg border border-transparent">
             <span className="block skew-x-[10deg]">Admin Login</span>
