@@ -33,9 +33,16 @@ async function processBulkCampaign(contacts: any[]) {
   
   for (let i = 0; i < contacts.length; i++) {
     const row = contacts[i];
-    const phoneNumber = row.phone || row.Phone || row.PHONE || row.phone_number || row.Phone_Number;
+    let phoneNumber = row.phone || row.Phone || row.PHONE || row.phone_number || row.Phone_Number;
     
     if (phoneNumber) {
+      phoneNumber = String(phoneNumber).trim();
+      if (/^\d{10}$/.test(phoneNumber)) {
+        phoneNumber = `+91${phoneNumber}`;
+      } else if (phoneNumber.startsWith('91') && phoneNumber.length === 12) {
+        phoneNumber = `+${phoneNumber}`;
+      }
+
       const payload = {
         phone: phoneNumber,
         agent_id: "agent_1201m313x98jenasy4knjk1hme5q",
