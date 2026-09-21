@@ -1,10 +1,20 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Search, Download, Filter, ExternalLink, PhoneIncoming, PhoneOutgoing } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export function LogsTableClient({ initialLogs, error }: { initialLogs: any[], error: string | null }) {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Auto-refresh the page data every 10 seconds without losing client state
+  useEffect(() => {
+    const interval = setInterval(() => {
+      router.refresh();
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [router]);
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
   const [filterType, setFilterType] = useState<"all" | "inbound" | "outbound">("all");
 
