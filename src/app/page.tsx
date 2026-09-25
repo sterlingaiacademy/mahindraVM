@@ -5,6 +5,7 @@ import { ArrowRight, PhoneCall, Bot, BarChart3, Globe, Database, CalendarCheck, 
 import Link from "next/link";
 import { useRef, useState, useEffect } from "react";
 
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const liveCallVariants = [
   '"I would like to book a test drive."',
@@ -53,7 +54,7 @@ export default function LandingPage() {
       
       {/* Navigation */}
       <nav className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-8 transition-all duration-500 pointer-events-none ${
-        scrolled ? 'py-3 md:py-4 bg-[#0a0a0a] backdrop-blur-lg shadow-sm border-b border-white/5' : 'py-4 md:py-6 bg-transparent'
+        scrolled ? 'py-3 md:py-4 bg-white/70 dark:bg-white/5 backdrop-blur-lg shadow-sm border-b border-gray-200 dark:border-white/5' : 'py-4 md:py-6 bg-transparent'
       }`}>
         <div className="flex items-center gap-3 pointer-events-auto">
           {/* Always white when at top. When scrolled, hide in light mode, show in dark mode */}
@@ -63,9 +64,11 @@ export default function LandingPage() {
 
         <div className="flex items-center gap-4 md:gap-6 pointer-events-auto">
           <div className="hidden lg:flex gap-8 mr-4 text-xs font-bold tracking-widest uppercase">
-            <Link href="#features" className={`transition-colors ${scrolled ? 'text-gray-300 hover:text-black dark:hover:text-white' : 'text-white/80 hover:text-white'}`}>Features</Link>
-            <Link href="#call-flow" className={`transition-colors ${scrolled ? 'text-gray-300 hover:text-black dark:hover:text-white' : 'text-white/80 hover:text-white'}`}>Call Flow</Link>
+            <Link href="#features" className={`transition-colors ${scrolled ? 'text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white' : 'text-white/80 hover:text-white'}`}>Features</Link>
+            <Link href="#call-flow" className={`transition-colors ${scrolled ? 'text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white' : 'text-white/80 hover:text-white'}`}>Call Flow</Link>
           </div>
+          
+          <ThemeToggle className={scrolled ? "text-gray-800 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/10" : "text-white hover:bg-white/20"} />
           
           <Link href="/login" className="px-4 md:px-6 py-2 bg-mahindra-red text-white font-bold text-[10px] md:text-sm uppercase tracking-widest hover:bg-mahindra-red-dark transition-colors skew-x-[-10deg] shadow-lg border border-transparent">
             <span className="block skew-x-[10deg]">Admin Login</span>
@@ -98,7 +101,7 @@ export default function LandingPage() {
             </p>
             <Link 
               href="#features" 
-              className="inline-flex items-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-mahindra-red text-white hover:bg-[#cc0000] font-bold uppercase tracking-widest hover:bg-mahindra-red hover:text-white transition-colors skew-x-[-10deg] shadow-2xl group text-xs md:text-base"
+              className="inline-flex items-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-white text-mahindra-black font-bold uppercase tracking-widest hover:bg-mahindra-red hover:text-white transition-colors skew-x-[-10deg] shadow-2xl group text-xs md:text-base"
             >
               <span className="block skew-x-[10deg]">Explore Capabilities</span>
               <ArrowRight className="w-4 h-4 md:w-5 md:h-5 skew-x-[10deg] group-hover:translate-x-1 transition-transform" />
@@ -160,14 +163,14 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
           >
             <h2 className="text-3xl md:text-5xl font-bold uppercase tracking-tighter mb-6">Never Miss A <span className="text-mahindra-red">Lead</span></h2>
-            <p className="text-gray-400 text-lg mb-8 leading-relaxed">
+            <p className="text-gray-600 dark:text-gray-400 text-lg mb-8 leading-relaxed">
               Unlike a traditional reception desk, the AI Voice Agent remains available beyond normal working hours. A customer calling at 10:30 PM doesn&apos;t hear a closed message &mdash; they continue the conversation, get answers, and their enquiry is captured for your sales team.
             </p>
             <ul className="space-y-4 mb-10">
               {["Immediate Response to Every Call", "Reduced Repetitive Workload", "Consistent Information Delivery", "Seamless Human Escalation"].map((item, i) => (
                 <li key={i} className="flex items-center gap-3">
                   <ShieldCheck className="w-6 h-6 text-mahindra-red" />
-                  <span className="font-medium text-gray-200">{item}</span>
+                  <span className="font-medium text-gray-800 dark:text-gray-200">{item}</span>
                 </li>
               ))}
             </ul>
@@ -181,7 +184,7 @@ export default function LandingPage() {
             className="relative h-[550px] w-full"
           >
              {/* The Video Card */}
-             <div className="absolute inset-0 rounded-2xl overflow-hidden border border-white/5 shadow-2xl">
+             <div className="absolute inset-0 rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-2xl">
                <VideoBackground videoId="HvZHXclEj-Q" opacity="opacity-90" />
                <div className="absolute inset-0 bg-gradient-to-tr from-mahindra-red/30 via-black/40 to-transparent z-10" />
              </div>
@@ -190,18 +193,18 @@ export default function LandingPage() {
              <motion.div 
                animate={{ y: [0, -10, 0] }}
                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-               className="absolute left-2 md:-left-10 top-8 md:top-1/4 bg-[#0a0a0a] backdrop-blur-2xl border border-white/5 p-4 md:p-5 rounded-2xl shadow-2xl z-20 w-[90%] md:w-72 max-w-sm"
+               className="absolute left-2 md:-left-10 top-8 md:top-1/4 bg-white/60 dark:bg-white/10 backdrop-blur-2xl border border-white/50 dark:border-white/10 p-4 md:p-5 rounded-2xl shadow-2xl z-20 w-[90%] md:w-72 max-w-sm"
              >
                 <div className="flex items-center gap-3 mb-2 md:mb-3">
                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]" />
-                  <span className="text-xs uppercase font-bold text-gray-300">Live Call</span>
+                  <span className="text-xs uppercase font-bold text-gray-600 dark:text-gray-300">Live Call</span>
                 </div>
                 <div className="min-h-[2.5rem] flex items-center">
                   <motion.p 
                     key={`live-${variantIndex}`}
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-xs md:text-sm font-medium text-white leading-relaxed"
+                    className="text-xs md:text-sm font-medium text-gray-900 dark:text-white leading-relaxed"
                   >
                     {liveCallVariants[variantIndex]}
                   </motion.p>
@@ -235,7 +238,7 @@ export default function LandingPage() {
         </div>
         
         <div className="max-w-5xl mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
-          <div className="bg-[#0a0a0a] backdrop-blur-2xl border border-white/5 p-6 md:p-8 relative shadow-2xl rounded-2xl overflow-hidden">
+          <div className="bg-white/70 dark:bg-white/5 backdrop-blur-2xl border border-white/40 dark:border-white/10 p-6 md:p-8 relative shadow-2xl rounded-2xl overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-mahindra-red to-transparent" />
             <h3 className="text-xl md:text-2xl font-bold uppercase tracking-widest mb-8 md:mb-10 text-center text-mahindra-red">Inbound</h3>
             <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-mahindra-red before:via-mahindra-red/50 before:to-transparent">
@@ -249,7 +252,7 @@ export default function LandingPage() {
             </div>
           </div>
           
-          <div className="bg-[#0a0a0a] backdrop-blur-2xl border border-white/5 p-6 md:p-8 relative shadow-2xl rounded-2xl overflow-hidden">
+          <div className="bg-white/70 dark:bg-white/5 backdrop-blur-2xl border border-white/40 dark:border-white/10 p-6 md:p-8 relative shadow-2xl rounded-2xl overflow-hidden">
              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-mahindra-red to-transparent" />
              <h3 className="text-xl md:text-2xl font-bold uppercase tracking-widest mb-8 md:mb-10 text-center text-mahindra-red">Outbound</h3>
              <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-mahindra-red before:via-mahindra-red/50 before:to-transparent">
@@ -287,13 +290,13 @@ function FeatureCard({ icon, title, description }: { icon: React.ReactNode, titl
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      className="bg-[#0a0a0a] backdrop-blur-xl p-8 border border-white/5 hover:border-mahindra-red/50 shadow-xl transition-all duration-300 group relative overflow-hidden rounded-2xl"
+      className="bg-white/70 dark:bg-white/5 backdrop-blur-xl p-8 border border-white/40 dark:border-white/10 hover:border-mahindra-red/50 shadow-xl transition-all duration-300 group relative overflow-hidden rounded-2xl"
     >
-      <div className="mb-6 bg-white/5 w-16 h-16 flex items-center justify-center group-hover:bg-mahindra-red/10 transition-colors relative z-10">
+      <div className="mb-6 bg-gray-100 dark:bg-white/5 w-16 h-16 flex items-center justify-center group-hover:bg-mahindra-red/10 transition-colors relative z-10">
         {icon}
       </div>
       <h4 className="text-xl font-bold uppercase tracking-wide mb-3 relative z-10">{title}</h4>
-      <p className="text-gray-400 leading-relaxed text-sm relative z-10">{description}</p>
+      <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm relative z-10">{description}</p>
     </motion.div>
   );
 }
@@ -301,9 +304,9 @@ function FeatureCard({ icon, title, description }: { icon: React.ReactNode, titl
 function FlowStep({ title, isLast = false }: { title: string, isLast?: boolean }) {
   return (
     <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active z-10">
-      <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white/5 bg-mahindra-red text-white shadow-lg shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-20 backdrop-blur-md" />
-      <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-[#0a0a0a] backdrop-blur-md p-4 border border-white/5 group-hover:border-mahindra-red/50 transition-all duration-300 rounded-xl shadow-md hover:shadow-xl">
-        <h4 className="font-bold text-sm uppercase tracking-wide text-white">{title}</h4>
+      <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white/50 dark:border-white/10 bg-mahindra-red text-white shadow-lg shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-20 backdrop-blur-md" />
+      <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white/70 dark:bg-white/5 backdrop-blur-md p-4 border border-white/50 dark:border-white/10 group-hover:border-mahindra-red/50 transition-all duration-300 rounded-xl shadow-md hover:shadow-xl">
+        <h4 className="font-bold text-sm uppercase tracking-wide text-gray-900 dark:text-white">{title}</h4>
       </div>
     </div>
   );
