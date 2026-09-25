@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { Search, Download, Filter, ExternalLink, PhoneIncoming, PhoneOutgoing } from "lucide-react";
+import { Search, Download, Filter, ExternalLink, PhoneIncoming, PhoneOutgoing, RefreshCw } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export function LogsTableClient({ initialLogs, error }: { initialLogs: any[], error: string | null }) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Auto-refresh the page data every 10 seconds without losing client state
   useEffect(() => {
@@ -15,6 +16,12 @@ export function LogsTableClient({ initialLogs, error }: { initialLogs: any[], er
     }, 10000);
     return () => clearInterval(interval);
   }, [router]);
+
+  const handleManualRefresh = () => {
+    setIsRefreshing(true);
+    router.refresh();
+    setTimeout(() => setIsRefreshing(false), 1000);
+  };
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
   const [filterType, setFilterType] = useState<"all" | "inbound" | "outbound">("all");
 
@@ -102,6 +109,19 @@ export function LogsTableClient({ initialLogs, error }: { initialLogs: any[], er
             className="flex-1 sm:flex-none justify-center flex items-center gap-2 px-4 py-3 md:py-2 bg-mahindra-red text-white hover:bg-mahindra-red-dark disabled:opacity-50 transition-colors border border-transparent text-sm font-bold uppercase tracking-widest"
           >
             <Download className="w-4 h-4" /> Export
+          </button>
+          <button
+            onClick={handleManualRefresh}
+            className="flex-1 sm:flex-none justify-center flex items-center gap-3 bg-white dark:bg-white/5 px-4 py-3 md:py-2 rounded-full border border-gray-200 dark:border-white/10 shadow-sm hover:bg-gray-50 dark:hover:bg-white/10 transition-colors cursor-pointer group"
+          >
+            <span className="relative flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+            </span>
+            <span className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-widest flex items-center gap-2">
+              Live Sync
+              <RefreshCw className={`w-3 h-3 text-gray-500 group-hover:text-black dark:group-hover:text-white transition-colors ${isRefreshing ? "animate-spin text-black dark:text-white" : ""}`} />
+            </span>
           </button>
         </div>
       </header>

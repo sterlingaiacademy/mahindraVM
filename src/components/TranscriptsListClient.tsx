@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, Mic, PhoneCall, CheckCircle2, XCircle, ArrowUpDown } from "lucide-react";
+import { Search, Mic, PhoneCall, CheckCircle2, XCircle, ArrowUpDown, RefreshCw } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export function TranscriptsListClient({ 
   conversations, 
@@ -15,9 +16,17 @@ export function TranscriptsListClient({
   selectedData: any, 
   error: string | null 
 }) {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
   const [filterStatus, setFilterStatus] = useState<"all" | "success" | "failed">("all");
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleManualRefresh = () => {
+    setIsRefreshing(true);
+    router.refresh();
+    setTimeout(() => setIsRefreshing(false), 1000);
+  };
 
   const filteredConversations = useMemo(() => {
     let result = [...conversations];
@@ -55,9 +64,25 @@ export function TranscriptsListClient({
       {/* Left List Pane */}
       <div className="w-[400px] flex flex-col bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-3xl transition-all duration-500 overflow-hidden shadow-sm shrink-0">
         <div className="p-4 border-b border-gray-200 dark:border-white/10 shrink-0 bg-gray-50 dark:bg-white/5">
-          <h2 className="text-xl font-bold uppercase tracking-tight mb-4 flex items-center gap-2">
-            <Mic className="w-5 h-5 text-mahindra-red" />
-            Raw Transcripts
+          <h2 className="text-xl font-bold uppercase tracking-tight mb-4 flex items-center justify-between gap-2">
+            <span className="flex items-center gap-2">
+              <Mic className="w-5 h-5 text-mahindra-red" />
+              Raw Transcripts
+            </span>
+            <button
+              onClick={handleManualRefresh}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 transition-colors group"
+              title="Refresh transcripts"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+              <span className="text-[10px] font-bold text-gray-600 dark:text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
+                Sync
+                <RefreshCw className={`w-3 h-3 ${isRefreshing ? "animate-spin" : "text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white"} transition-colors`} />
+              </span>
+            </button>
           </h2>
           
           <div className="space-y-3">
