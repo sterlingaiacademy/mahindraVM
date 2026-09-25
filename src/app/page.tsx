@@ -193,18 +193,18 @@ export default function LandingPage() {
              <motion.div 
                animate={{ y: [0, -10, 0] }}
                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-               className="absolute -left-6 md:-left-10 top-1/4 bg-white/60 dark:bg-white/10 backdrop-blur-2xl border border-white/50 dark:border-white/10 p-5 rounded-2xl shadow-2xl z-20 w-64 md:w-72"
+               className="absolute left-2 md:-left-10 top-8 md:top-1/4 bg-white/60 dark:bg-white/10 backdrop-blur-2xl border border-white/50 dark:border-white/10 p-4 md:p-5 rounded-2xl shadow-2xl z-20 w-[90%] md:w-72 max-w-sm"
              >
-                <div className="flex items-center gap-3 mb-3">
+                <div className="flex items-center gap-3 mb-2 md:mb-3">
                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]" />
                   <span className="text-xs uppercase font-bold text-gray-600 dark:text-gray-300">Live Call</span>
                 </div>
-                <div className="h-10 flex items-center">
+                <div className="min-h-[2.5rem] flex items-center">
                   <motion.p 
                     key={`live-${variantIndex}`}
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-sm font-medium text-gray-900 dark:text-white leading-relaxed"
+                    className="text-xs md:text-sm font-medium text-gray-900 dark:text-white leading-relaxed"
                   >
                     {liveCallVariants[variantIndex]}
                   </motion.p>
@@ -215,7 +215,7 @@ export default function LandingPage() {
              <motion.div 
                animate={{ y: [0, 10, 0] }}
                transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
-               className="absolute -right-6 md:-right-10 bottom-1/4 bg-mahindra-red/80 backdrop-blur-2xl border border-white/20 p-5 rounded-2xl shadow-2xl z-20 w-56 text-white"
+               className="absolute right-2 md:-right-10 bottom-8 md:bottom-1/4 bg-mahindra-red/80 backdrop-blur-2xl border border-white/20 p-4 md:p-5 rounded-2xl shadow-2xl z-20 w-[80%] md:w-56 max-w-sm text-white"
              >
                 <div className="text-[10px] font-bold tracking-widest uppercase mb-1 opacity-80">CRM Updated</div>
                 <motion.div
@@ -232,15 +232,15 @@ export default function LandingPage() {
       </section>
 
       {/* Proposed Call Flow */}
-      <section id="call-flow" className="py-32 bg-transparent relative z-20">
-        <div className="max-w-7xl mx-auto px-6 md:px-16 text-center mb-20">
+      <section id="call-flow" className="py-16 md:py-32 bg-transparent relative z-20">
+        <div className="max-w-7xl mx-auto px-6 md:px-16 text-center mb-12 md:mb-20">
           <h2 className="text-3xl md:text-5xl font-bold uppercase tracking-tighter">Proposed <span className="text-mahindra-red">Call Flow</span></h2>
         </div>
         
-        <div className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16">
-          <div className="bg-white/70 dark:bg-white/5 backdrop-blur-2xl border border-white/40 dark:border-white/10 p-8 relative shadow-2xl rounded-2xl overflow-hidden">
+        <div className="max-w-5xl mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
+          <div className="bg-white/70 dark:bg-white/5 backdrop-blur-2xl border border-white/40 dark:border-white/10 p-6 md:p-8 relative shadow-2xl rounded-2xl overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-mahindra-red to-transparent" />
-            <h3 className="text-2xl font-bold uppercase tracking-widest mb-10 text-center text-mahindra-red">Inbound</h3>
+            <h3 className="text-xl md:text-2xl font-bold uppercase tracking-widest mb-8 md:mb-10 text-center text-mahindra-red">Inbound</h3>
             <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-mahindra-red before:via-mahindra-red/50 before:to-transparent">
               <FlowStep title="Customer Calls" />
               <FlowStep title="AI Answers Immediately" />
@@ -252,9 +252,9 @@ export default function LandingPage() {
             </div>
           </div>
           
-          <div className="bg-white/70 dark:bg-white/5 backdrop-blur-2xl border border-white/40 dark:border-white/10 p-8 relative shadow-2xl rounded-2xl overflow-hidden">
+          <div className="bg-white/70 dark:bg-white/5 backdrop-blur-2xl border border-white/40 dark:border-white/10 p-6 md:p-8 relative shadow-2xl rounded-2xl overflow-hidden">
              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-mahindra-red to-transparent" />
-             <h3 className="text-2xl font-bold uppercase tracking-widest mb-10 text-center text-mahindra-red">Outbound</h3>
+             <h3 className="text-xl md:text-2xl font-bold uppercase tracking-widest mb-8 md:mb-10 text-center text-mahindra-red">Outbound</h3>
              <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-mahindra-red before:via-mahindra-red/50 before:to-transparent">
                <FlowStep title="Lead Database / CRM" />
                <FlowStep title="AI Initiates Call" />
@@ -269,7 +269,7 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Footer - With Third YouTube Video */}
-      <footer className="py-32 bg-black text-center relative overflow-hidden z-20">
+      <footer className="py-20 md:py-32 bg-black text-center relative overflow-hidden z-20">
         <VideoBackground videoId="Kne9fiwdxpk" opacity="opacity-40" />
         <div className="absolute inset-0 bg-mahindra-black/60 z-10" />
         <div className="relative z-30 max-w-3xl mx-auto px-6">

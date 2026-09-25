@@ -79,7 +79,7 @@ export default function LoginPage() {
       </div>
 
       {/* Login Form Container */}
-      <div className="relative z-10 w-full max-w-md p-10 backdrop-blur-xl bg-black/40 border border-white/10 shadow-2xl rounded-sm">
+      <div className="relative z-10 w-full max-w-md p-6 md:p-10 mx-4 backdrop-blur-xl bg-black/40 border border-white/10 shadow-2xl rounded-sm">
         <div className="flex justify-center mb-10">
           <img src="/logo_dark.png" alt="Mahindra Logo" className="h-[60px] w-auto object-contain drop-shadow-xl" />
         </div>
