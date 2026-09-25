@@ -1,6 +1,7 @@
 import { Activity, Phone, Calendar, Wrench, Percent, Car, Clock } from "lucide-react";
 import Papa from "papaparse";
 import Link from "next/link";
+import { RefreshButton } from "@/components/RefreshButton";
 import { LeadSourceChart, LeadStatusChart } from "@/components/DashboardCharts";
 import { UpcomingEventsBoard } from "@/components/UpcomingEventsBoard";
 
@@ -87,13 +88,7 @@ export default async function DashboardOverview() {
             New Call
           </Link>
           
-          <div className="flex-1 md:flex-none justify-center flex items-center gap-3 bg-white dark:bg-white/5 px-4 py-3 md:py-2.5 rounded-full border border-gray-200 dark:border-white/10 shadow-sm backdrop-blur-md">
-            <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-            </span>
-            <span className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-widest">Live Sync</span>
-          </div>
+          <RefreshButton />
         </div>
       </header>
 
