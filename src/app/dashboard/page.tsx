@@ -32,8 +32,11 @@ export default async function DashboardOverview() {
       const todayString = new Date().toISOString().split('T')[0];
 
       logs.forEach((log: any) => {
-        if (log["Visit Day"] && log["Visit Day"].trim() !== "") showroomVisits++;
-        if (log["Service Type"] && log["Service Type"].trim() !== "") serviceBookings++;
+        const hasVisit = log["Visit Day"] && log["Visit Day"].trim() !== "";
+        const hasService = log["Service Type"] && log["Service Type"].trim() !== "";
+        
+        if (hasVisit) showroomVisits++;
+        else if (hasService) serviceBookings++;
         
         if (log["Call Date"] && log["Call Date"].includes(todayString)) todaysCalls++;
 
