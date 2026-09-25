@@ -80,26 +80,26 @@ export function LogsTableClient({ initialLogs, error }: { initialLogs: any[], er
   };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
-      <header className="mb-10 flex justify-between items-end">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto">
+      <header className="mb-6 md:mb-10 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
         <div>
-          <h1 className="text-3xl font-bold uppercase tracking-tight mb-2">Call Logs</h1>
-          <p className="text-gray-600 dark:text-gray-400">Live data synced from Google Sheets CRM.</p>
+          <h1 className="text-2xl md:text-3xl font-bold uppercase tracking-tight mb-2">Call Logs</h1>
+          <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">Live data synced from Google Sheets CRM.</p>
         </div>
         
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-3 w-full sm:w-auto">
           <a 
             href="https://docs.google.com/spreadsheets/d/1EuYUHCElFWq6AgsA-FWFGfnRCxQTOdKG_73725C0fXg/edit" 
             target="_blank" 
             rel="noreferrer"
-            className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors border border-gray-200 dark:border-white/10 text-sm font-medium"
+            className="flex-1 sm:flex-none justify-center flex items-center gap-2 px-4 py-3 md:py-2 bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors border border-gray-200 dark:border-white/10 text-sm font-medium"
           >
             <ExternalLink className="w-4 h-4" /> Open Sheet
           </a>
           <button 
             onClick={handleExport}
             disabled={filteredLogs.length === 0}
-            className="flex items-center gap-2 px-4 py-2 bg-mahindra-red text-white hover:bg-mahindra-red-dark disabled:opacity-50 transition-colors border border-transparent text-sm font-bold uppercase tracking-widest"
+            className="flex-1 sm:flex-none justify-center flex items-center gap-2 px-4 py-3 md:py-2 bg-mahindra-red text-white hover:bg-mahindra-red-dark disabled:opacity-50 transition-colors border border-transparent text-sm font-bold uppercase tracking-widest"
           >
             <Download className="w-4 h-4" /> Export
           </button>
@@ -120,7 +120,7 @@ export function LogsTableClient({ initialLogs, error }: { initialLogs: any[], er
         </div>
       )}
 
-      <div className="bg-white dark:bg-mahindra-black border border-gray-200 dark:border-white/10 rounded-sm overflow-hidden shadow-sm mb-6">
+      <div className="bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-sm overflow-hidden shadow-sm mb-6">
         <div className="p-4 border-b border-gray-200 dark:border-white/10 flex flex-col md:flex-row gap-4 bg-gray-50 dark:bg-white/5">
           <div className="relative flex-1">
             <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
@@ -129,14 +129,14 @@ export function LogsTableClient({ initialLogs, error }: { initialLogs: any[], er
               placeholder="Search by name, phone, vehicle, or enquiry..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white dark:bg-mahindra-dark border border-gray-200 dark:border-white/10 py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-mahindra-red transition-colors rounded-sm"
+              className="w-full bg-white dark:bg-[#050505] border border-gray-200 dark:border-white/10 py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:border-mahindra-red transition-colors rounded-sm"
             />
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
             <select 
               value={filterType} 
               onChange={(e) => setFilterType(e.target.value as any)}
-              className="bg-white dark:bg-mahindra-dark border border-gray-200 dark:border-white/10 py-2.5 px-3 text-sm focus:outline-none focus:border-mahindra-red transition-colors rounded-sm"
+              className="w-full sm:w-auto bg-white dark:bg-[#050505] border border-gray-200 dark:border-white/10 py-3 md:py-2.5 px-3 text-sm focus:outline-none focus:border-mahindra-red transition-colors rounded-sm"
             >
               <option value="all">All Types</option>
               <option value="inbound">Inbound Only</option>
@@ -145,7 +145,7 @@ export function LogsTableClient({ initialLogs, error }: { initialLogs: any[], er
             <select 
               value={sortOrder} 
               onChange={(e) => setSortOrder(e.target.value as any)}
-              className="bg-white dark:bg-mahindra-dark border border-gray-200 dark:border-white/10 py-2.5 px-3 text-sm focus:outline-none focus:border-mahindra-red transition-colors rounded-sm"
+              className="w-full sm:w-auto bg-white dark:bg-[#050505] border border-gray-200 dark:border-white/10 py-3 md:py-2.5 px-3 text-sm focus:outline-none focus:border-mahindra-red transition-colors rounded-sm"
             >
               <option value="newest">Newest First</option>
               <option value="oldest">Oldest First</option>

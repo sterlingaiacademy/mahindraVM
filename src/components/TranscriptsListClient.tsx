@@ -50,10 +50,10 @@ export function TranscriptsListClient({
   }, [conversations, searchQuery, sortOrder, filterStatus]);
 
   return (
-    <div className="p-8 max-w-7xl mx-auto flex h-[calc(100vh-2rem)] gap-6">
+    <div className="p-8 max-w-[1400px] bg-[#F8F9FA] dark:bg-black animate-fade-up mx-auto flex h-[calc(100vh-2rem)] gap-6">
       
       {/* Left List Pane */}
-      <div className="w-[400px] flex flex-col bg-white dark:bg-mahindra-black border border-gray-200 dark:border-white/10 rounded-sm overflow-hidden shadow-sm shrink-0">
+      <div className="w-[400px] flex flex-col bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-3xl transition-all duration-500 overflow-hidden shadow-sm shrink-0">
         <div className="p-4 border-b border-gray-200 dark:border-white/10 shrink-0 bg-gray-50 dark:bg-white/5">
           <h2 className="text-xl font-bold uppercase tracking-tight mb-4 flex items-center gap-2">
             <Mic className="w-5 h-5 text-mahindra-red" />
@@ -68,14 +68,14 @@ export function TranscriptsListClient({
                 placeholder="Search summaries or IDs..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white dark:bg-mahindra-dark border border-gray-200 dark:border-white/10 py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-mahindra-red transition-colors rounded-sm"
+                className="w-full bg-white dark:bg-[#050505] border border-gray-200 dark:border-white/10 py-2 pl-9 pr-3 text-sm focus:outline-none focus:border-mahindra-red transition-colors rounded-3xl transition-all duration-500"
               />
             </div>
             <div className="flex gap-2">
               <select 
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value as any)}
-                className="flex-1 bg-white dark:bg-mahindra-dark border border-gray-200 dark:border-white/10 py-1.5 px-2 text-xs focus:outline-none focus:border-mahindra-red rounded-sm"
+                className="flex-1 bg-white dark:bg-[#050505] border border-gray-200 dark:border-white/10 py-1.5 px-2 text-xs focus:outline-none focus:border-mahindra-red rounded-3xl transition-all duration-500"
               >
                 <option value="all">All Status</option>
                 <option value="success">Successful</option>
@@ -84,7 +84,7 @@ export function TranscriptsListClient({
               <select 
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value as any)}
-                className="flex-1 bg-white dark:bg-mahindra-dark border border-gray-200 dark:border-white/10 py-1.5 px-2 text-xs focus:outline-none focus:border-mahindra-red rounded-sm"
+                className="flex-1 bg-white dark:bg-[#050505] border border-gray-200 dark:border-white/10 py-1.5 px-2 text-xs focus:outline-none focus:border-mahindra-red rounded-3xl transition-all duration-500"
               >
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>
@@ -141,7 +141,7 @@ export function TranscriptsListClient({
       </div>
 
       {/* Right Detail Pane */}
-      <div className="flex-1 bg-white dark:bg-mahindra-black border border-gray-200 dark:border-white/10 rounded-sm shadow-sm flex flex-col overflow-hidden">
+      <div className="flex-1 bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-3xl transition-all duration-500 shadow-sm flex flex-col overflow-hidden">
         {selectedData ? (
           <>
             <div className="p-6 border-b border-gray-200 dark:border-white/10 shrink-0 bg-gray-50 dark:bg-white/5">
@@ -173,9 +173,9 @@ export function TranscriptsListClient({
                     <span className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-1 px-1">
                       {isAgent ? "Ananya (AI)" : "Customer"}
                     </span>
-                    <div className={`p-4 rounded-sm max-w-[85%] text-sm leading-relaxed shadow-sm ${
+                    <div className={`p-4 rounded-3xl transition-all duration-500 max-w-[85%] text-sm leading-relaxed shadow-sm ${
                       isAgent 
-                        ? 'bg-gray-100 dark:bg-mahindra-dark text-gray-900 dark:text-gray-100' 
+                        ? 'bg-gray-100 dark:bg-[#050505] text-gray-900 dark:text-gray-100' 
                         : 'bg-mahindra-red text-white'
                     }`}>
                       {turn.message || <span className="italic opacity-50">No audio detected</span>}
@@ -193,7 +193,7 @@ export function TranscriptsListClient({
             <Mic className="w-16 h-16 mb-4 text-gray-300 dark:text-gray-700" />
             <h3 className="text-lg font-bold mb-2">Select a Conversation</h3>
             <p className="text-sm max-w-xs">
-              Choose a call from the list to securely load its raw audio recording and live transcript directly from ElevenLabs.
+              Choose a call from the list to securely load its raw audio recording and live transcript directly from the Voice AI Engine.
             </p>
           </div>
         )}

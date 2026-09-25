@@ -122,16 +122,16 @@ export default function OutboundTriggerPage() {
   };
 
   return (
-    <div className="p-8 max-w-5xl mx-auto">
-      <header className="mb-10">
-        <h1 className="text-3xl font-bold uppercase tracking-tight mb-2 text-gray-900 dark:text-white">Outbound Campaign</h1>
-        <p className="text-gray-500 dark:text-gray-400">Trigger manual or bulk AI outbound calls via your integrated SIP Trunk.</p>
+    <div className="p-4 md:p-8 max-w-5xl mx-auto">
+      <header className="mb-10 flex flex-col items-start relative z-10 animate-fade-up">
+        <h1 className="text-4xl font-extrabold uppercase tracking-tighter mb-2 text-gray-900 dark:text-white bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-500 dark:from-white dark:to-gray-400">Outbound Campaign</h1>
+        <p className="text-gray-500 dark:text-gray-400">Trigger manual or bulk AI outbound calls via your Voice AI Engine.</p>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
         
         {/* Manual Trigger Form */}
-        <div className="bg-white dark:bg-mahindra-black border border-gray-200 dark:border-white/10 p-6 rounded-sm shadow-sm">
+        <div className="bg-white dark:bg-black border border-gray-200 dark:border-white/10 p-6 md:p-8 rounded-3xl hover:shadow-xl transition-all duration-500 shadow-sm">
           <h2 className="text-xl font-bold uppercase tracking-wide mb-6 pb-4 border-b border-gray-100 dark:border-white/5 text-gray-900 dark:text-white">
             Single Call Trigger
           </h2>
@@ -145,11 +145,11 @@ export default function OutboundTriggerPage() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+91 9876543210" 
-                className="w-full bg-gray-50 dark:bg-mahindra-dark border border-gray-200 dark:border-white/10 p-3 text-sm focus:outline-none focus:border-mahindra-red transition-colors font-mono dark:text-white text-gray-900"
+                className="w-full bg-gray-50 dark:bg-[#050505] border border-gray-200 dark:border-white/10 p-3 text-sm focus:outline-none focus:border-mahindra-red transition-colors font-mono dark:text-white text-gray-900"
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-bold uppercase text-gray-500 dark:text-gray-400 mb-2">Customer Name</label>
                 <input 
@@ -157,7 +157,7 @@ export default function OutboundTriggerPage() {
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
                   placeholder="e.g. Rahul Menon" 
-                  className="w-full bg-gray-50 dark:bg-mahindra-dark border border-gray-200 dark:border-white/10 p-3 text-sm focus:outline-none focus:border-mahindra-red transition-colors dark:text-white text-gray-900"
+                  className="w-full bg-gray-50 dark:bg-[#050505] border border-gray-200 dark:border-white/10 p-3 text-sm focus:outline-none focus:border-mahindra-red transition-colors dark:text-white text-gray-900"
                 />
               </div>
               
@@ -168,7 +168,7 @@ export default function OutboundTriggerPage() {
                   value={vehicleName}
                   onChange={(e) => setVehicleName(e.target.value)}
                   placeholder="e.g. XUV700" 
-                  className="w-full bg-gray-50 dark:bg-mahindra-dark border border-gray-200 dark:border-white/10 p-3 text-sm focus:outline-none focus:border-mahindra-red transition-colors dark:text-white text-gray-900"
+                  className="w-full bg-gray-50 dark:bg-[#050505] border border-gray-200 dark:border-white/10 p-3 text-sm focus:outline-none focus:border-mahindra-red transition-colors dark:text-white text-gray-900"
                 />
               </div>
             </div>
@@ -180,7 +180,7 @@ export default function OutboundTriggerPage() {
                 value={context}
                 onChange={(e) => setContext(e.target.value)}
                 placeholder="E.g., Remind the customer about their scheduled XUV700 test drive tomorrow at 10 AM." 
-                className="w-full bg-gray-50 dark:bg-mahindra-dark border border-gray-200 dark:border-white/10 p-3 text-sm focus:outline-none focus:border-mahindra-red transition-colors resize-none dark:text-white text-gray-900"
+                className="w-full bg-gray-50 dark:bg-[#050505] border border-gray-200 dark:border-white/10 p-3 text-sm focus:outline-none focus:border-mahindra-red transition-colors resize-none dark:text-white text-gray-900"
               />
             </div>
 
@@ -216,16 +216,16 @@ export default function OutboundTriggerPage() {
 
         {/* List Uploader & Status */}
         <div className="space-y-6">
-          <div className="bg-white dark:bg-mahindra-black border border-gray-200 dark:border-white/10 p-6 rounded-sm shadow-sm">
+          <div className="bg-white dark:bg-black border border-gray-200 dark:border-white/10 p-6 md:p-8 rounded-3xl hover:shadow-xl transition-all duration-500 shadow-sm">
             <h2 className="text-xl font-bold uppercase tracking-wide mb-6 pb-4 border-b border-gray-100 dark:border-white/5 text-gray-900 dark:text-white flex items-center justify-between">
               <span>Bulk Campaign</span>
-              {bulkList.length > 0 && <span className="text-xs bg-mahindra-red text-white px-2 py-1 rounded-sm">{bulkList.length} Rows loaded</span>}
+              {bulkList.length > 0 && <span className="text-xs bg-mahindra-red text-white px-2 py-1 rounded-3xl hover:shadow-xl transition-all duration-500">{bulkList.length} Rows loaded</span>}
             </h2>
             
             {bulkList.length === 0 ? (
               <div 
                 onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-gray-300 dark:border-white/10 p-8 text-center hover:border-mahindra-red dark:hover:border-mahindra-red/50 transition-colors cursor-pointer group rounded-sm bg-gray-50 dark:bg-transparent"
+                className="border-2 border-dashed border-gray-300 dark:border-white/10 p-8 text-center hover:border-mahindra-red dark:hover:border-mahindra-red/50 transition-colors cursor-pointer group rounded-3xl hover:shadow-xl transition-all duration-500 bg-gray-50 dark:bg-transparent"
               >
                 <div className="w-12 h-12 bg-gray-200 dark:bg-white/5 mx-auto mb-4 flex items-center justify-center rounded-full group-hover:bg-mahindra-red/10 transition-colors">
                   <FileUp className="w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-mahindra-red" />
@@ -234,7 +234,7 @@ export default function OutboundTriggerPage() {
                 <p className="text-xs text-gray-500">Columns: phone, customer_name, vehicle_name, context</p>
               </div>
             ) : (
-              <div className="border border-gray-200 dark:border-white/10 rounded-sm bg-gray-50 dark:bg-mahindra-dark flex flex-col">
+              <div className="border border-gray-200 dark:border-white/10 rounded-3xl hover:shadow-xl transition-all duration-500 bg-gray-50 dark:bg-[#050505] flex flex-col">
                 <div className="p-4 border-b border-gray-200 dark:border-white/10 flex justify-between items-center">
                   <h3 className="font-bold text-gray-900 dark:text-white uppercase tracking-wider text-sm">{bulkList.length} Contacts Ready</h3>
                   <button 
@@ -253,7 +253,7 @@ export default function OutboundTriggerPage() {
                       const name = row.customer_name || row.name || row.Name || row.CUSTOMER_NAME || "Unknown";
                       
                       return (
-                        <li key={index} className="flex items-center justify-between p-3 bg-white dark:bg-mahindra-black border border-gray-200 dark:border-white/5 rounded-sm">
+                        <li key={index} className="flex items-center justify-between p-3 bg-white dark:bg-black border border-gray-200 dark:border-white/5 rounded-3xl hover:shadow-xl transition-all duration-500">
                           <div className="flex flex-col text-left overflow-hidden pr-2">
                             <span className="text-sm font-bold text-gray-900 dark:text-white truncate">
                               {name !== "Unknown" ? name : phone}
@@ -277,7 +277,7 @@ export default function OutboundTriggerPage() {
                             {bulkStatus === "idle" && (
                               <button 
                                 onClick={() => setBulkList(prev => prev.filter((_, i) => i !== index))}
-                                className="p-2 text-gray-400 hover:text-mahindra-red hover:bg-mahindra-red/10 rounded-sm transition-colors"
+                                className="p-2 text-gray-400 hover:text-mahindra-red hover:bg-mahindra-red/10 rounded-3xl hover:shadow-xl transition-all duration-500 transition-colors"
                                 title="Remove contact"
                               >
                                 <X className="w-4 h-4" />
@@ -298,7 +298,7 @@ export default function OutboundTriggerPage() {
 
                 <div className="p-4 border-t border-gray-200 dark:border-white/10">
                   {bulkStatus === "running" && (
-                    <div className="p-3 bg-gray-100 dark:bg-white/5 text-gray-500 text-sm font-bold flex items-center justify-center gap-2 rounded-sm">
+                    <div className="p-3 bg-gray-100 dark:bg-white/5 text-gray-500 text-sm font-bold flex items-center justify-center gap-2 rounded-3xl hover:shadow-xl transition-all duration-500">
                       <Loader2 className="w-4 h-4 animate-spin" /> Dispatching to Server...
                     </div>
                   )}
@@ -306,14 +306,14 @@ export default function OutboundTriggerPage() {
                   {bulkStatus === "idle" && (
                     <button 
                       onClick={startBulkCampaign}
-                      className="w-full py-3 bg-mahindra-red text-white font-bold uppercase tracking-wider text-xs hover:bg-[#cc0000] transition-colors flex justify-center items-center gap-2 shadow-md rounded-sm"
+                      className="w-full py-3 bg-mahindra-red text-white font-bold uppercase tracking-wider text-xs hover:bg-[#cc0000] transition-colors flex justify-center items-center gap-2 shadow-md rounded-3xl hover:shadow-xl transition-all duration-500"
                     >
                       <Play className="w-4 h-4 fill-current" /> Start Background Campaign
                     </button>
                   )}
                   
                   {bulkStatus === "done" && (
-                    <div className="p-4 bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20 rounded-sm">
+                    <div className="p-4 bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20 rounded-3xl hover:shadow-xl transition-all duration-500">
                       <div className="text-green-700 dark:text-green-400 text-sm font-bold flex items-center justify-center gap-2 mb-1">
                         <CheckCircle2 className="w-4 h-4" /> Dispatched Successfully
                       </div>
@@ -336,18 +336,19 @@ export default function OutboundTriggerPage() {
             
             <button 
               onClick={downloadTemplate}
-              className="w-full py-3 mt-4 bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 font-bold uppercase tracking-wider text-xs border border-gray-200 dark:border-white/10 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors rounded-sm flex items-center justify-center gap-2"
+              className="w-full py-3 mt-4 bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 font-bold uppercase tracking-wider text-xs border border-gray-200 dark:border-white/10 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors rounded-3xl hover:shadow-xl transition-all duration-500 flex items-center justify-center gap-2"
             >
               <Download className="w-4 h-4" /> Download Template
             </button>
           </div>
 
-          <div className="bg-mahindra-red/5 border border-mahindra-red/20 p-6 rounded-sm">
-             <h3 className="text-sm font-bold uppercase tracking-wide text-mahindra-red flex items-center gap-2 mb-2">
-               <AlertCircle className="w-4 h-4" /> Native API Integration
+          <div className="bg-mahindra-red/5 border border-mahindra-red/20 p-8 rounded-3xl relative overflow-hidden group animate-fade-up" style={{ animationDelay: '300ms' }}>
+             <div className="absolute top-0 right-0 w-32 h-32 bg-mahindra-red/10 rounded-full blur-2xl -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700 pointer-events-none" />
+             <h3 className="text-xs font-black uppercase tracking-widest text-mahindra-red flex items-center gap-2 mb-3 relative z-10">
+               <AlertCircle className="w-4 h-4" /> Native Integration
              </h3>
-             <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-               The outbound trigger is now directly wired to the Node.js backend using the LiveKit SDK. It will create rooms and automatically dispatch AI agents for each call in the background.
+             <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-medium relative z-10">
+               The outbound trigger is directly wired to your internal AI Voice Engine. It will create secure connections and automatically dispatch Voice Agents for each call in the background seamlessly.
              </p>
           </div>
         </div>
@@ -356,3 +357,4 @@ export default function OutboundTriggerPage() {
     </div>
   );
 }
+

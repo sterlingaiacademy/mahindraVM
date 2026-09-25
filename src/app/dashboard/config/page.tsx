@@ -52,87 +52,92 @@ export default function ConfigPage() {
   };
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold uppercase tracking-tighter mb-2">Account Configuration</h1>
-        <p className="text-gray-500 dark:text-gray-400">Manage your system settings and account access.</p>
+    <div className="p-8 max-w-5xl mx-auto min-h-screen bg-[#F8F9FA] dark:bg-black">
+      <div className="mb-12 animate-fade-up">
+        <h1 className="text-4xl font-extrabold uppercase tracking-tighter mb-2 text-gray-900 dark:text-white bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-500 dark:from-white dark:to-gray-400">Account Configuration</h1>
+        <p className="text-gray-500 dark:text-gray-400 font-medium">Manage your system settings and secure access.</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 space-y-8 animate-fade-up" style={{ animationDelay: '100ms' }}>
           
           {/* Dashboard Credentials Settings */}
-          <div className="bg-white dark:bg-mahindra-black border border-gray-200 dark:border-white/10 p-6 rounded-sm shadow-sm">
-            <h2 className="text-xl font-bold uppercase tracking-wide mb-6 pb-4 border-b border-gray-200 dark:border-white/5 flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-mahindra-red" />
-              <span>Account Settings</span>
+          <div className="group bg-white dark:bg-[#050505] border border-gray-100 dark:border-white/5 p-6 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-500 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-64 h-64 bg-mahindra-red/5 rounded-full blur-3xl -ml-32 -mt-32 transition-transform group-hover:scale-150 duration-700 pointer-events-none" />
+            
+            <h2 className="text-xl font-bold uppercase tracking-widest mb-8 text-gray-800 dark:text-gray-200 flex items-center gap-3 relative z-10">
+              <div className="w-10 h-10 rounded-2xl bg-mahindra-red/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <ShieldCheck className="w-5 h-5 text-mahindra-red" />
+              </div>
+              <span>Admin Credentials</span>
             </h2>
 
-            <form onSubmit={handleUpdate} className="space-y-4">
+            <form onSubmit={handleUpdate} className="space-y-4 relative z-10">
               <div>
-                <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1">New Username</label>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 pl-2">New Username</label>
                 <div className="flex relative">
-                  <User className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <User className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input 
                     type="text" 
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="Enter new username"
-                    className="w-full bg-gray-50 dark:bg-mahindra-dark border border-gray-200 dark:border-white/10 py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-mahindra-red/50 transition-colors"
+                    className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-white/10 py-2.5 pl-11 pr-4 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-mahindra-red/50 focus:border-mahindra-red transition-all duration-300"
                   />
                 </div>
               </div>
               
               <div>
-                <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1">New Password</label>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 pl-2">New Password</label>
                 <div className="flex relative">
-                  <Lock className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <Lock className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input 
                     type="password" 
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter new password"
-                    className="w-full bg-gray-50 dark:bg-mahindra-dark border border-gray-200 dark:border-white/10 py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-mahindra-red/50 transition-colors"
+                    className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-white/10 py-2.5 pl-11 pr-4 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-mahindra-red/50 focus:border-mahindra-red transition-all duration-300"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1">Confirm New Password</label>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 pl-2">Confirm New Password</label>
                 <div className="flex relative">
-                  <Lock className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <Lock className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input 
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Confirm new password"
-                    className="w-full bg-gray-50 dark:bg-mahindra-dark border border-gray-200 dark:border-white/10 py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-mahindra-red/50 transition-colors"
+                    className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-white/10 py-2.5 pl-11 pr-4 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-mahindra-red/50 focus:border-mahindra-red transition-all duration-300"
                   />
                 </div>
               </div>
 
-              <div className="pt-2">
+              <div className="pt-4">
                 <button 
                   type="submit" 
                   disabled={status === 'loading'}
-                  className="px-6 py-2 bg-mahindra-red text-white text-xs font-bold uppercase tracking-wider hover:bg-mahindra-red-dark transition-colors rounded-sm skew-x-[-10deg] disabled:opacity-50 disabled:hover:bg-mahindra-red flex items-center"
+                  className="w-full py-3 bg-mahindra-red hover:bg-mahindra-red-dark text-white font-extrabold uppercase tracking-widest text-sm transition-all duration-300 flex justify-center items-center gap-3 rounded-2xl shadow-lg hover:shadow-mahindra-red/40 hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:hover:-translate-y-0 disabled:hover:shadow-none"
                 >
-                  <span className="block skew-x-[10deg] flex items-center gap-2">
-                    {status === 'loading' && <Loader2 className="w-3 h-3 animate-spin" />} 
-                    Update Credentials
-                  </span>
+                  {status === 'loading' ? (
+                    <><Loader2 className="w-5 h-5 animate-spin" /> Saving Changes...</>
+                  ) : (
+                    "Update Credentials"
+                  )}
                 </button>
               </div>
               
               {status === 'success' && (
-                <div className="p-4 bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20 text-green-700 dark:text-green-400 text-sm flex items-start gap-3 mt-4">
+                <div className="p-4 rounded-xl text-sm font-medium bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400 border border-green-500/20 flex items-start gap-3 mt-4 animate-pop">
                   <CheckCircle2 className="w-5 h-5 shrink-0" />
                   <p>{message}</p>
                 </div>
               )}
               
               {status === 'error' && (
-                <div className="p-4 bg-red-50 dark:bg-mahindra-red/10 border border-red-200 dark:border-mahindra-red/20 text-red-700 dark:text-mahindra-red text-sm flex items-start gap-3 mt-4">
+                <div className="p-4 rounded-xl text-sm font-medium bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400 border border-red-500/20 flex items-start gap-3 mt-4 animate-pop">
                   <AlertCircle className="w-5 h-5 shrink-0" />
                   <p>{message}</p>
                 </div>
@@ -141,18 +146,21 @@ export default function ConfigPage() {
           </div>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-8 animate-fade-up" style={{ animationDelay: '200ms' }}>
           {/* Agent Settings Note */}
-          <div className="bg-mahindra-dark border border-white/5 text-white p-6 rounded-sm shadow-sm relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-4 opacity-10">
-              <Bot className="w-24 h-24" />
+          <div className="bg-mahindra-red/5 border border-mahindra-red/20 p-6 rounded-3xl relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-mahindra-red/10 rounded-full blur-2xl -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700 pointer-events-none" />
+            
+            <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity duration-500 transform group-hover:rotate-12 pointer-events-none">
+              <Bot className="w-32 h-32 text-mahindra-red" />
             </div>
-            <h3 className="text-mahindra-red font-bold uppercase tracking-wide mb-2 relative z-10 flex items-center gap-2">
-              <Settings className="w-4 h-4" />
-              Agent Configuration
+
+            <h3 className="text-xs font-black uppercase tracking-widest text-mahindra-red flex items-center gap-2 mb-3 relative z-10">
+              <Settings className="w-4 h-4 animate-[spin_4s_linear_infinite]" />
+              AI Behavior Profile
             </h3>
-            <p className="text-sm text-gray-300 relative z-10 leading-relaxed">
-              If you need to edit the agent's behavior, instructions, or voice settings, please contact the developers.
+            <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-medium relative z-10">
+              The internal AI logic, prompting guardrails, and acoustic model parameters are securely locked. To request changes to the conversational AI behavior, please contact your account manager.
             </p>
           </div>
         </div>

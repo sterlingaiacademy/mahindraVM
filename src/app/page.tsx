@@ -164,7 +164,7 @@ export default function LandingPage() {
           >
             <h2 className="text-3xl md:text-5xl font-bold uppercase tracking-tighter mb-6">Never Miss A <span className="text-mahindra-red">Lead</span></h2>
             <p className="text-gray-600 dark:text-gray-400 text-lg mb-8 leading-relaxed">
-              Unlike a traditional reception desk, the AI Voice Agent remains available beyond normal working hours. A customer calling at 10:30 PM doesn't hear a closed message—they continue the conversation, get answers, and their enquiry is captured for your sales team.
+              Unlike a traditional reception desk, the AI Voice Agent remains available beyond normal working hours. A customer calling at 10:30 PM doesn&apos;t hear a closed message &mdash; they continue the conversation, get answers, and their enquiry is captured for your sales team.
             </p>
             <ul className="space-y-4 mb-10">
               {["Immediate Response to Every Call", "Reduced Repetitive Workload", "Consistent Information Delivery", "Seamless Human Escalation"].map((item, i) => (
