@@ -4,13 +4,17 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  // Auth check — only logged-in admins can access audio
+  const isAdmin = req.cookies.get('is_admin')?.value === 'true';
+  if (!isAdmin) return new NextResponse("Unauthorized", { status: 401 });
+
   const { id } = await params;
   
   if (!id) {
     return new NextResponse("Missing conversation ID", { status: 400 });
   }
 
-  const apiKey = "sk_c86898a6cdbb6520c0af7f74c198f9a1260111d1ad4d2967";
+  const apiKey = process.env.ELEVENLABS_API_KEY || "";
   
   try {
     const response = await fetch(`https://api.elevenlabs.io/v1/convai/conversations/${id}/audio`, {

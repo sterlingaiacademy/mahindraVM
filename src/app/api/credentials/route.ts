@@ -1,8 +1,12 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  // Auth check — only logged-in admins can change credentials
+  const isAdmin = req.cookies.get('is_admin')?.value === 'true';
+  if (!isAdmin) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
   try {
     const { username, password } = await req.json();
 

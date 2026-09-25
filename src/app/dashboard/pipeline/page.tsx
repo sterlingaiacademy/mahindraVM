@@ -24,7 +24,9 @@ export default async function PipelinePage() {
   const scheduled: any[] = [];
   const serviceBooked: any[] = [];
 
-  logs.forEach(log => {
+  logs.forEach(rawLog => {
+    // Spread to avoid mutating the original parsed CSV object
+    const log = { ...rawLog };
     const vehicle = log["Vehicle Model"]?.trim() || "";
     const visitDayRaw = log["Visit Day"]?.trim() || "";
     let visitDay = visitDayRaw;
@@ -34,12 +36,12 @@ export default async function PipelinePage() {
         const callDate = new Date(callDateStr);
         if (!isNaN(callDate.getTime())) {
           if (visitDayRaw.toLowerCase() === "today") {
-            visitDay = callDate.toISOString().split("T")[0];
+            visitDay = callDate.toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
             log["Visit Day"] = visitDay;
           } else if (visitDayRaw.toLowerCase() === "tomorrow") {
             const tmrw = new Date(callDate);
             tmrw.setDate(tmrw.getDate() + 1);
-            visitDay = tmrw.toISOString().split("T")[0];
+            visitDay = tmrw.toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
             log["Visit Day"] = visitDay;
           }
         }

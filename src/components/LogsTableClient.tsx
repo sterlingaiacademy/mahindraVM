@@ -9,11 +9,12 @@ export function LogsTableClient({ initialLogs, error }: { initialLogs: any[], er
   const [searchQuery, setSearchQuery] = useState("");
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Auto-refresh the page data every 10 seconds without losing client state
+  // Auto-refresh every 60 seconds, paused when tab is not visible
   useEffect(() => {
-    const interval = setInterval(() => {
-      router.refresh();
-    }, 10000);
+    const tick = () => {
+      if (!document.hidden) router.refresh();
+    };
+    const interval = setInterval(tick, 60000);
     return () => clearInterval(interval);
   }, [router]);
 

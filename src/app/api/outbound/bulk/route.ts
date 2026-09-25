@@ -1,13 +1,22 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 const PYTHON_SERVER_URL = process.env.PYTHON_SERVER_URL || "http://localhost:8080/outbound";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  // Auth check — only logged-in admins can trigger bulk campaigns
+  const isAdmin = req.cookies.get('is_admin')?.value === 'true';
+  if (!isAdmin) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
   try {
     const { contacts } = await req.json();
 
     if (!contacts || !Array.isArray(contacts)) {
       return NextResponse.json({ error: "Invalid contacts list" }, { status: 400 });
+    }
+    
+    // Safety cap — prevent runaway campaigns
+    if (contacts.length > 500) {
+      return NextResponse.json({ error: "Maximum 500 contacts per campaign" }, { status: 400 });
     }
 
     // Kick off the background process WITHOUT awaiting it, 
@@ -40,7 +49,7 @@ async function processBulkCampaign(contacts: any[]) {
 
       const payload = {
         phone: phoneNumber,
-        agent_id: "agent_1201m313x98jenasy4knjk1hme5q",
+        agent_id: process.env.ELEVENLABS_AGENT_ID || "",
         conversation_variables: {
           ...row,
           Direction: "Outbound",

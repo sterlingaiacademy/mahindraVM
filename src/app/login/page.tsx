@@ -40,8 +40,7 @@ export default function LoginPage() {
       });
       
       if (res.ok) {
-        document.cookie = "is_admin=true; path=/";
-        // Force a hard redirect so the server middleware picks up the new cookie instantly
+        // Cookie is now set server-side by /api/login — just redirect
         window.location.href = "/dashboard";
       } else {
         setError(true);
@@ -122,7 +121,7 @@ export default function LoginPage() {
               disabled={isLoading}
               className="w-full px-6 py-4 bg-mahindra-red text-white font-bold text-sm uppercase tracking-widest hover:bg-[#cc0000] transition-colors skew-x-[-10deg] shadow-lg flex justify-center group disabled:opacity-75 disabled:cursor-not-allowed"
             >
-              <span className="block skew-x-[10deg] transition-transform flex items-center gap-2">
+              <span className="skew-x-[10deg] transition-transform flex items-center gap-2">
                 {isLoading ? (
                   <><Loader2 className="w-5 h-5 animate-spin" /> Authenticating...</>
                 ) : (

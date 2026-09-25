@@ -1,8 +1,12 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 const PYTHON_SERVER_URL = process.env.PYTHON_SERVER_URL || "http://localhost:8080/outbound";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  // Auth check — only logged-in admins can trigger calls
+  const isAdmin = req.cookies.get('is_admin')?.value === 'true';
+  if (!isAdmin) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
   try {
     const data = await req.json();
     
@@ -10,6 +14,11 @@ export async function POST(req: Request) {
     if (!data.conversation_variables) data.conversation_variables = {};
     data.conversation_variables.Direction = "Outbound";
     data.conversation_variables.direction = "Outbound";
+    
+    // Inject agent_id server-side from env var so it never lives in client code
+    if (!data.agent_id) {
+      data.agent_id = process.env.ELEVENLABS_AGENT_ID || "";
+    }
 
     // Pass the request directly to the Python server running on GCP
     const response = await fetch(PYTHON_SERVER_URL, {

@@ -30,7 +30,6 @@ export default async function DashboardOverview() {
       totalCalls = logs.length;
       
       const vehicleCounts: Record<string, number> = {};
-      const todayString = new Date().toISOString().split('T')[0];
 
       logs.forEach((log: any) => {
         const hasVisit = log["Visit Day"] && log["Visit Day"].trim() !== "";

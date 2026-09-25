@@ -6,11 +6,11 @@ import { Calendar, Clock, MapPin, User, Car, Bell } from "lucide-react";
 export function UpcomingEventsBoard({ data }: { data: any[] }) {
   const [selectedDate, setSelectedDate] = useState<string>("today");
 
-  // Helper to get today's date in YYYY-MM-DD
-  const today = new Date().toISOString().split('T')[0];
+  // Helper to get today's date in YYYY-MM-DD using IST timezone
+  const today = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
   const tomorrowObj = new Date();
   tomorrowObj.setDate(tomorrowObj.getDate() + 1);
-  const tomorrow = tomorrowObj.toISOString().split('T')[0];
+  const tomorrow = tomorrowObj.toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
 
   // Extract all events from logs
   const allEvents: any[] = [];
@@ -27,13 +27,13 @@ export function UpcomingEventsBoard({ data }: { data: any[] }) {
       if (callDateStr && callDateStr !== "-") {
         try {
           const callDate = new Date(callDateStr);
-          if (!isNaN(callDate.getTime())) {
+          if (callDate && !isNaN(callDate.getTime())) {
             if (visitDay.toLowerCase() === "today") {
-              dateString = callDate.toISOString().split("T")[0];
+              dateString = callDate.toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
             } else if (visitDay.toLowerCase() === "tomorrow") {
               const tmrw = new Date(callDate);
               tmrw.setDate(tmrw.getDate() + 1);
-              dateString = tmrw.toISOString().split("T")[0];
+              dateString = tmrw.toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
             }
           }
         } catch (e) {}
@@ -43,7 +43,7 @@ export function UpcomingEventsBoard({ data }: { data: any[] }) {
       }
       
       allEvents.push({
-        id: Math.random().toString(),
+        id: `${log["Phone Number"] || "x"}_${log["Call Date"] || "x"}_${log["Visit Day"] || "x"}`,
         type: serviceType && serviceType !== "-" ? "service" : "showroom",
         title: serviceType && serviceType !== "-" ? `Service: ${serviceType}` : "Showroom Visit",
         customer: log["Customer Name"] || "Unknown",

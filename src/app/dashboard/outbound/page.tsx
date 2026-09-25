@@ -25,7 +25,6 @@ export default function OutboundTriggerPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           phone: phoneNumber.trim(),
-          agent_id: "agent_1201m313x98jenasy4knjk1hme5q",
           conversation_variables: contextData
         })
       });

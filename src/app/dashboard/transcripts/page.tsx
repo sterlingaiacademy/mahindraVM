@@ -1,7 +1,7 @@
 import { TranscriptsListClient } from "@/components/TranscriptsListClient";
 
-const API_KEY = "sk_c86898a6cdbb6520c0af7f74c198f9a1260111d1ad4d2967";
-const AGENT_ID = "agent_1201m313x98jenasy4knjk1hme5q";
+const API_KEY = process.env.ELEVENLABS_API_KEY || "";
+const AGENT_ID = process.env.ELEVENLABS_AGENT_ID || "";
 
 export const revalidate = 0; // Disable caching
 

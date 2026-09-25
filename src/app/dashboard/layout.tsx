@@ -128,7 +128,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             )}
           </div>
           
-          <button onClick={() => { document.cookie = "is_admin=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; window.location.href = "/"; }} className={cn(
+          <button onClick={async () => { await fetch("/api/logout", { method: "POST" }); window.location.href = "/"; }} className={cn(
             "relative flex items-center transition-colors uppercase tracking-wide group rounded-md", 
             isCollapsed ? "justify-center p-2 hover:bg-black/5 dark:hover:bg-white/10" : "gap-3 text-sm font-medium hover:text-black dark:text-gray-400 dark:hover:text-white"
           )}>

@@ -21,9 +21,17 @@ export async function POST(req: Request) {
     const inputPass = (password || "").trim();
 
     if (inputUser === validUser && inputPass === validPass) {
-      return NextResponse.json({ success: true });
+      const response = NextResponse.json({ success: true });
+      response.cookies.set("is_admin", "true", {
+        httpOnly: true,
+        secure: false, // set to true when behind HTTPS
+        sameSite: "strict",
+        path: "/",
+        maxAge: 60 * 60 * 24 // 24 hours
+      });
+      return response;
     } else {
-      console.log(`[Login Failed] Attempted: ${inputUser}:${inputPass} | Expected: ${validUser}:${validPass}`);
+      console.log(`[Login Failed] Attempted login for user: ${inputUser}`);
       return NextResponse.json({ success: false, error: "Invalid credentials" }, { status: 401 });
     }
   } catch (error: any) {
