@@ -35,13 +35,26 @@ export default async function DashboardOverview() {
         const hasVisit = log["Visit Day"] && log["Visit Day"].trim() !== "";
         const hasService = log["Service Type"] && log["Service Type"].trim() !== "";
         
-        if (hasVisit) showroomVisits++;
-        else if (hasService) serviceBookings++;
+        if (hasService) serviceBookings++;
+        else if (hasVisit) showroomVisits++;
         
-        if (log["Call Date"] && log["Call Date"].includes(todayString)) todaysCalls++;
+        let isToday = false;
+        if (log["Call Date"] && log["Call Date"].trim() !== "") {
+          try {
+            const d = new Date(log["Call Date"]);
+            if (!isNaN(d.getTime())) {
+              const localDate = d.toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
+              const todayLocal = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
+              if (localDate === todayLocal) isToday = true;
+            }
+          } catch(e) {}
+        }
+        if (isToday) todaysCalls++;
 
-        const vehicle = log["Vehicle Model"]?.trim();
+        let vehicle = log["Vehicle Model"]?.trim();
         if (vehicle && vehicle !== "-") {
+          if (vehicle.toLowerCase().includes("xuv seven")) vehicle = "XUV700";
+          if (vehicle.toLowerCase().includes("xuv three")) vehicle = "XUV300";
           vehicleCounts[vehicle] = (vehicleCounts[vehicle] || 0) + 1;
         }
       });

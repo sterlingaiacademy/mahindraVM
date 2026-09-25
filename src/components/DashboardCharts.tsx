@@ -69,8 +69,8 @@ export function LeadStatusChart({ data }: { data: any[] }) {
     const hasVisit = log["Visit Day"] && log["Visit Day"].trim() !== "";
     const hasService = log["Service Type"] && log["Service Type"].trim() !== "";
     
-    if (hasVisit) showroom++;
-    else if (hasService) service++;
+    if (hasService) service++;
+    else if (hasVisit) showroom++;
     else open++;
   });
 

@@ -48,10 +48,10 @@ export default async function PipelinePage() {
     const serviceType = log["Service Type"]?.trim() || "";
     const enquiry = (log["Enquiry Type"] || "").toLowerCase();
 
-    if (visitDay && visitDay !== "-") {
-      scheduled.push(log);
-    } else if (serviceType && serviceType !== "-") {
+    if (serviceType && serviceType !== "-") {
       serviceBooked.push(log);
+    } else if (visitDay && visitDay !== "-") {
+      scheduled.push(log);
     } else if (vehicle && vehicle !== "-" && enquiry.includes("sales")) {
       hotLeads.push(log);
     } else {
