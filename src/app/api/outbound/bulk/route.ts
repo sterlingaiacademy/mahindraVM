@@ -4,16 +4,15 @@ import path from 'path';
 import { randomUUID } from 'crypto';
 
 const PYTHON_SERVER_URL = process.env.PYTHON_SERVER_URL || "http://localhost:8080/outbound";
-// We deduce the status URL automatically based on the outbound URL
-const PYTHON_STATUS_BASE_URL = PYTHON_SERVER_URL.replace('/outbound', '/status');
+const PYTHON_STATUS_BASE_URL = PYTHON_SERVER_URL.replace(/\/outbound\/?$/, '/status');
 
 const ELEVENLABS_AGENT_ID = process.env.ELEVENLABS_AGENT_ID || "";
 const STATUS_FILE = path.join(process.cwd(), 'campaign_status.json');
 
-const CALL_TIMEOUT_MS = 5 * 60 * 1000;  // 5 min max per call
-const POLL_INTERVAL_MS = 2500;           // check LiveKit every 2.5s
-const CALL_CONNECT_WAIT_MS = 3000;       // wait 3s before polling (let AI join room)
-const BETWEEN_CALLS_BUFFER_MS = 2000;    // 2s buffer between each call
+const CALL_TIMEOUT_MS = 5 * 60 * 1000;
+const POLL_INTERVAL_MS = 2500;
+const CALL_CONNECT_WAIT_MS = 3000;
+const BETWEEN_CALLS_BUFFER_MS = 2000;
 
 export type ContactStatus = {
   phone: string;
@@ -43,12 +42,11 @@ function writeStatus(data: CampaignStatus) {
 async function waitForLiveKitRoom(roomName: string, phone: string): Promise<'done' | 'timeout' | 'failed'> {
   const deadline = Date.now() + CALL_TIMEOUT_MS;
   
-  // Wait a few seconds for the room to initialize and participants to join
   await new Promise(r => setTimeout(r, CALL_CONNECT_WAIT_MS));
 
   while (Date.now() < deadline) {
     try {
-      const res = await fetch(`${PYTHON_STATUS_BASE_URL}/${roomName}`);
+      const res = await fetch(`${PYTHON_STATUS_BASE_URL}/${encodeURIComponent(roomName)}`);
       if (res.ok) {
         const data = await res.json();
         if (data.status === 'ended') {
@@ -58,7 +56,6 @@ async function waitForLiveKitRoom(roomName: string, phone: string): Promise<'don
           console.log(`[Campaign] Call to ${phone} active in ${roomName} (Participants: ${data.participant_count})...`);
         }
       } else {
-         // If Python returns 404, the room is completely gone
          if (res.status === 404) return 'done';
       }
     } catch (e) {
@@ -95,10 +92,7 @@ async function processBulkCampaign(contacts: ContactStatus[]) {
       continue;
     }
 
-    // 1. Phone Sanitization (Strip everything except digits and '+')
     const safePhone = contact.phone.replace(/[^\d+]/g, '');
-
-    // 2. Generate unique UUID for this call
     const callId = randomUUID();
 
     try {
@@ -112,7 +106,7 @@ async function processBulkCampaign(contacts: ContactStatus[]) {
           Direction: 'Outbound',
           direction: 'Outbound',
           phone: safePhone,
-          call_id: callId // Inject into ElevenLabs context
+          call_id: callId
         },
       };
 
@@ -136,7 +130,6 @@ async function processBulkCampaign(contacts: ContactStatus[]) {
       const roomName = resultData.room_name;
 
       if (roomName) {
-        // 3. New LiveKit Real-Time Tracking
         const result = await waitForLiveKitRoom(roomName, safePhone);
         if (result === 'done') {
           contact.status = 'done';
@@ -148,10 +141,9 @@ async function processBulkCampaign(contacts: ContactStatus[]) {
           contact.error = 'Call ended unsuccessfully';
         }
       } else {
-         // Fallback if no room_name returned from python for some reason
          contact.status = 'done';
          contact.error = 'Warning: No room tracking available';
-         await new Promise(r => setTimeout(r, 60000)); // 1 min fake delay
+         await new Promise(r => setTimeout(r, 60000));
       }
     } catch (e: any) {
       contact.status = 'failed';
@@ -160,7 +152,6 @@ async function processBulkCampaign(contacts: ContactStatus[]) {
 
     writeStatus(state);
 
-    // Small breathing room between calls
     if (i < contacts.length - 1) {
       await new Promise(r => setTimeout(r, BETWEEN_CALLS_BUFFER_MS));
     }
@@ -187,7 +178,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Maximum 500 contacts per campaign' }, { status: 400 });
     }
 
-    // Block if already running
     try {
       const existing: CampaignStatus = JSON.parse(fs.readFileSync(STATUS_FILE, 'utf8'));
       if (existing.status === 'running') {
@@ -208,7 +198,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No valid phone numbers found in the list' }, { status: 400 });
     }
 
-    // Fire background loop — PM2 keeps it alive after response is sent
     processBulkCampaign(prepared);
 
     return NextResponse.json({
