@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { randomUUID } from 'crypto';
 
 const PYTHON_SERVER_URL = process.env.PYTHON_SERVER_URL || "http://localhost:8080/outbound";
 
@@ -10,10 +11,19 @@ export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
     
+    // Sanitize phone
+    if (data.phone) {
+      data.phone = data.phone.replace(/[^\d+]/g, '');
+    }
+
+    const callId = randomUUID();
+    data.call_id = callId;
+
     // Inject Outbound direction explicitly for the Google Sheet data collection
     if (!data.conversation_variables) data.conversation_variables = {};
     data.conversation_variables.Direction = "Outbound";
     data.conversation_variables.direction = "Outbound";
+    data.conversation_variables.call_id = callId;
     
     // Inject agent_id server-side from env var so it never lives in client code
     if (!data.agent_id) {

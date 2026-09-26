@@ -1,16 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { randomUUID } from 'crypto';
 
 const PYTHON_SERVER_URL = process.env.PYTHON_SERVER_URL || "http://localhost:8080/outbound";
-const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY || "";
+// We deduce the status URL automatically based on the outbound URL
+const PYTHON_STATUS_BASE_URL = PYTHON_SERVER_URL.replace('/outbound', '/status');
+
 const ELEVENLABS_AGENT_ID = process.env.ELEVENLABS_AGENT_ID || "";
 const STATUS_FILE = path.join(process.cwd(), 'campaign_status.json');
 
 const CALL_TIMEOUT_MS = 5 * 60 * 1000;  // 5 min max per call
-const POLL_INTERVAL_MS = 8000;           // check ElevenLabs every 8s
-const CALL_CONNECT_WAIT_MS = 15000;      // wait 15s for call to connect before polling
-const BETWEEN_CALLS_BUFFER_MS = 4000;   // 4s buffer between each call
+const POLL_INTERVAL_MS = 2500;           // check LiveKit every 2.5s
+const CALL_CONNECT_WAIT_MS = 3000;       // wait 3s before polling (let AI join room)
+const BETWEEN_CALLS_BUFFER_MS = 2000;    // 2s buffer between each call
 
 export type ContactStatus = {
   phone: string;
@@ -37,50 +40,30 @@ function writeStatus(data: CampaignStatus) {
   }
 }
 
-async function waitForCallToComplete(phone: string, triggerTimeMs: number): Promise<'done' | 'failed' | 'timeout'> {
+async function waitForLiveKitRoom(roomName: string, phone: string): Promise<'done' | 'timeout' | 'failed'> {
   const deadline = Date.now() + CALL_TIMEOUT_MS;
-  const triggerTimeSecs = Math.floor(triggerTimeMs / 1000);
-
-  // Wait for the call to actually connect before starting to poll
+  
+  // Wait a few seconds for the room to initialize and participants to join
   await new Promise(r => setTimeout(r, CALL_CONNECT_WAIT_MS));
-
-  const last10Digits = phone.replace(/\D/g, '').slice(-10);
 
   while (Date.now() < deadline) {
     try {
-      const res = await fetch(
-        `https://api.elevenlabs.io/v1/convai/conversations?agent_id=${ELEVENLABS_AGENT_ID}&page_size=10`,
-        { headers: { 'xi-api-key': ELEVENLABS_API_KEY } }
-      );
-
+      const res = await fetch(`${PYTHON_STATUS_BASE_URL}/${roomName}`);
       if (res.ok) {
         const data = await res.json();
-        const convos = (data.conversations || []) as any[];
-
-        // Find a conversation started within 90s of our trigger with a matching phone number
-        const match = convos.find((c: any) => {
-          const startSecs = c.start_time_unix_secs || 0;
-          const inWindow = startSecs >= (triggerTimeSecs - 10) && startSecs <= (triggerTimeSecs + 90);
-          const toNum: string = c.metadata?.phone_call?.to_number || '';
-          const phoneMatch = toNum === '' || toNum.replace(/\D/g, '').endsWith(last10Digits);
-          return inWindow && phoneMatch;
-        });
-
-        if (match) {
-          if (match.status === 'done') {
-            console.log(`[Campaign] Call to ${phone} completed. Success: ${match.call_successful}`);
-            return match.call_successful === 'success' ? 'done' : 'failed';
-          }
-          // still in_progress — keep polling
-          console.log(`[Campaign] Call to ${phone} still in progress...`);
+        if (data.status === 'ended') {
+          console.log(`[Campaign] LiveKit room ${roomName} ended for ${phone}.`);
+          return 'done';
         } else {
-          console.log(`[Campaign] No matching conversation found yet for ${phone}, polling...`);
+          console.log(`[Campaign] Call to ${phone} active in ${roomName} (Participants: ${data.participant_count})...`);
         }
+      } else {
+         // If Python returns 404, the room is completely gone
+         if (res.status === 404) return 'done';
       }
     } catch (e) {
-      console.error('[Campaign] ElevenLabs polling error:', e);
+      console.error(`[Campaign] Polling error for ${roomName}:`, e);
     }
-
     await new Promise(r => setTimeout(r, POLL_INTERVAL_MS));
   }
 
@@ -112,22 +95,28 @@ async function processBulkCampaign(contacts: ContactStatus[]) {
       continue;
     }
 
-    const triggerTime = Date.now();
+    // 1. Phone Sanitization (Strip everything except digits and '+')
+    const safePhone = contact.phone.replace(/[^\d+]/g, '');
+
+    // 2. Generate unique UUID for this call
+    const callId = randomUUID();
 
     try {
       const payload = {
-        phone: contact.phone,
+        phone: safePhone,
         agent_id: ELEVENLABS_AGENT_ID,
+        call_id: callId,
         conversation_variables: {
           customer_name: contact.name,
           vehicle: contact.vehicle,
           Direction: 'Outbound',
           direction: 'Outbound',
-          phone: contact.phone,
+          phone: safePhone,
+          call_id: callId // Inject into ElevenLabs context
         },
       };
 
-      console.log(`[Campaign] (${i + 1}/${contacts.length}) Calling ${contact.phone} (${contact.name})...`);
+      console.log(`[Campaign] (${i + 1}/${contacts.length}) Calling ${safePhone} (${contact.name})...`);
 
       const response = await fetch(PYTHON_SERVER_URL, {
         method: 'POST',
@@ -142,18 +131,27 @@ async function processBulkCampaign(contacts: ContactStatus[]) {
         writeStatus(state);
         continue;
       }
+      
+      const resultData = await response.json();
+      const roomName = resultData.room_name;
 
-      // Wait for the call to finish before dialing the next one
-      const result = await waitForCallToComplete(contact.phone, triggerTime);
-
-      if (result === 'done') {
-        contact.status = 'done';
-      } else if (result === 'timeout') {
-        contact.status = 'done';
-        contact.error = 'Completed (5-min timeout reached)';
+      if (roomName) {
+        // 3. New LiveKit Real-Time Tracking
+        const result = await waitForLiveKitRoom(roomName, safePhone);
+        if (result === 'done') {
+          contact.status = 'done';
+        } else if (result === 'timeout') {
+          contact.status = 'done';
+          contact.error = 'Completed (5-min timeout reached)';
+        } else {
+          contact.status = 'failed';
+          contact.error = 'Call ended unsuccessfully';
+        }
       } else {
-        contact.status = 'failed';
-        contact.error = 'Call ended unsuccessfully';
+         // Fallback if no room_name returned from python for some reason
+         contact.status = 'done';
+         contact.error = 'Warning: No room tracking available';
+         await new Promise(r => setTimeout(r, 60000)); // 1 min fake delay
       }
     } catch (e: any) {
       contact.status = 'failed';
