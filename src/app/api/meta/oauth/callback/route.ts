@@ -1,42 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
-
-const CONFIG_FILE = path.join(process.cwd(), 'meta_config.json');
+import { prisma } from '@/lib/prisma';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const code = searchParams.get('code');
   
   if (!code) {
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/campaigns?error=NoCode`);
+    return NextResponse.redirect(new URL('/dashboard/campaigns?error=no_code', req.url));
   }
 
-  const appId = process.env.META_APP_ID;
-  const appSecret = process.env.META_APP_SECRET;
-  const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/meta/oauth/callback`;
-
   try {
-    // 1. Exchange code for access token
-    const tokenRes = await fetch(`https://graph.facebook.com/v18.0/oauth/access_token?client_id=${appId}&redirect_uri=${encodeURIComponent(redirectUri)}&client_secret=${appSecret}&code=${code}`);
+    const appId = process.env.META_APP_ID;
+    const appSecret = process.env.META_APP_SECRET;
+    const redirectUri = `${new URL(req.url).origin}/api/meta/oauth/callback`;
+
+    const tokenRes = await fetch(`https://graph.facebook.com/v25.0/oauth/access_token?client_id=${appId}&redirect_uri=${redirectUri}&client_secret=${appSecret}&code=${code}`);
     const tokenData = await tokenRes.json();
-    
+
     if (tokenData.access_token) {
-      // 2. Save securely to local JSON (Acting as our simple Database)
-      const config = {
+      const configValue = JSON.stringify({
         access_token: tokenData.access_token,
         connected_at: new Date().toISOString()
-      };
-      fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2), 'utf8');
-      
-      // 3. Redirect back to UI with success
-      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/campaigns?success=true`);
-    } else {
-      console.error("Meta Token Error:", tokenData);
-      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/campaigns?error=TokenExchangeFailed`);
+      });
+
+      await prisma.systemConfig.upsert({
+        where: { key: 'META_CONFIG' },
+        update: { value: configValue },
+        create: { key: 'META_CONFIG', value: configValue }
+      });
     }
-  } catch (err) {
-    console.error("OAuth Callback Error:", err);
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/campaigns?error=ServerError`);
+
+    return NextResponse.redirect(new URL('/dashboard/campaigns?connected=true', req.url));
+  } catch (error) {
+    console.error("Meta OAuth Error:", error);
+    return NextResponse.redirect(new URL('/dashboard/campaigns?error=auth_failed', req.url));
   }
 }

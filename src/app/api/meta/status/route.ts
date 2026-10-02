@@ -1,21 +1,22 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
-
-const CONFIG_FILE = path.join(process.cwd(), 'meta_config.json');
+import { prisma } from '@/lib/prisma';
 
 export async function GET() {
-  if (fs.existsSync(CONFIG_FILE)) {
-    try {
-      const data = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
+  try {
+    const config = await prisma.systemConfig.findUnique({
+      where: { key: 'META_CONFIG' }
+    });
+
+    if (config && config.value) {
+      const data = JSON.parse(config.value);
       return NextResponse.json({ 
         connected: true, 
-        connected_at: data.connected_at || new Date().toISOString(),
+        connected_at: data.connected_at || config.updatedAt,
         token_active: true
       });
-    } catch(e) {
-      return NextResponse.json({ connected: false });
     }
+  } catch (error) {
+    return NextResponse.json({ connected: false });
   }
   return NextResponse.json({ connected: false });
 }
