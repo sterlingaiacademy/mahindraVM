@@ -25,7 +25,7 @@ export async function POST(req: Request) {
       response.cookies.set("is_admin", "true", {
         httpOnly: true,
         secure: false, // set to true when behind HTTPS
-        sameSite: "strict",
+        sameSite: "lax",
         path: "/",
         maxAge: 60 * 60 * 24 // 24 hours
       });

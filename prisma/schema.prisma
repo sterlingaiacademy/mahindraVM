@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// Stores the Audience Groups (e.g. "October Leads")
+model Audience {
+  id        String   @id @default(cuid())
+  name      String
+  numbers   String   // Comma-separated list of phone numbers
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Stores the incoming leads who clicked the WhatsApp buttons
+model WebhookLead {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  status    String   // E.g. "Book Test Drive"
+  time      DateTime @default(now())
+}
