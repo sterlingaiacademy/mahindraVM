@@ -10,8 +10,16 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const appId = process.env.META_APP_ID;
-    const appSecret = process.env.META_APP_SECRET;
+    const appIdConfig = await prisma.systemConfig.findUnique({ where: { key: 'META_APP_ID' } });
+    const appSecretConfig = await prisma.systemConfig.findUnique({ where: { key: 'META_APP_SECRET' } });
+    
+    const appId = appIdConfig?.value;
+    const appSecret = appSecretConfig?.value;
+
+    if (!appId || !appSecret) {
+      return NextResponse.redirect(new URL('/dashboard/campaigns?error=missing_credentials', req.url));
+    }
+
     const redirectUri = `${new URL(req.url).origin}/api/meta/oauth/callback`;
 
     const tokenRes = await fetch(`https://graph.facebook.com/v25.0/oauth/access_token?client_id=${appId}&redirect_uri=${redirectUri}&client_secret=${appSecret}&code=${code}`);
