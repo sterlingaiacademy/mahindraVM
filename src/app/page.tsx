@@ -82,7 +82,7 @@ export default function LandingPage() {
           style={{ y: yHero, opacity: opacityHero }}
           className="absolute inset-0 z-0 bg-black"
         >
-          <VideoBackground videoId="erhORDnwJeQ" opacity="opacity-70" />
+          <VideoBackground videoId="1FdR-snE7gQ" opacity="opacity-70" />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black/80 z-10" />
         </motion.div>
 
@@ -185,7 +185,7 @@ export default function LandingPage() {
           >
              {/* The Video Card */}
              <div className="absolute inset-0 rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-2xl">
-               <VideoBackground videoId="HvZHXclEj-Q" opacity="opacity-90" />
+               <VideoBackground videoId="N35UCr0bql4" opacity="opacity-90" />
                <div className="absolute inset-0 bg-gradient-to-tr from-mahindra-red/30 via-black/40 to-transparent z-10" />
              </div>
              
@@ -270,7 +270,7 @@ export default function LandingPage() {
 
       {/* CTA Footer - With Third YouTube Video */}
       <footer className="py-20 md:py-32 bg-black text-center relative overflow-hidden z-20">
-        <VideoBackground videoId="Kne9fiwdxpk" opacity="opacity-40" />
+        <VideoBackground videoId="gobKb0dWwTI" opacity="opacity-40" />
         <div className="absolute inset-0 bg-mahindra-black/60 z-10" />
         <div className="relative z-30 max-w-3xl mx-auto px-6">
           <h2 className="text-3xl md:text-5xl font-bold uppercase tracking-tighter mb-6 text-white drop-shadow-md">Experience the AI Voice Agent</h2>
