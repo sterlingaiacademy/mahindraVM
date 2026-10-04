@@ -40,6 +40,21 @@ export default function CampaignsPage() {
     setTimeout(() => setToast(null), 4000);
   };
 
+  
+  const handleConnectMeta = async () => {
+    try {
+      const res = await fetch('/api/credentials/system');
+      const config = await res.json();
+      if (!config.META_APP_ID || !config.META_APP_SECRET) {
+        showToast("Please enter your Meta credentials in the Account Config tab first!", "error");
+        return;
+      }
+      window.location.href = "/api/meta/oauth/login";
+    } catch (error) {
+      showToast("Failed to verify Meta configuration.", "error");
+    }
+  };
+
   const fetchData = async () => {
     try {
       const leadRes = await fetch('/api/meta/leads');
@@ -278,7 +293,7 @@ export default function CampaignsPage() {
                     </div>
                   </div>
                   <div className="p-1 flex bg-gray-50 dark:bg-zinc-900/50 border-t border-gray-100 dark:border-zinc-800">
-                    <button onClick={() => window.location.href = "/api/meta/oauth/login"} className="flex-1 flex items-center justify-center gap-2 p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-zinc-800 text-xs font-bold text-gray-700 dark:text-zinc-300 transition-colors">
+                    <button onClick={handleConnectMeta} className="flex-1 flex items-center justify-center gap-2 p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-zinc-800 text-xs font-bold text-gray-700 dark:text-zinc-300 transition-colors">
                       <RefreshCw className="w-3 h-3" /> Refresh
                     </button>
                     <button className="flex-1 flex items-center justify-center gap-2 p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-xs font-bold text-red-600 transition-colors">
