@@ -1,43 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  // Auth check — only logged-in admins can access audio
-  const isAdmin = req.cookies.get('is_admin')?.value === 'true';
-  if (!isAdmin) return new NextResponse("Unauthorized", { status: 401 });
-
-  const { id } = await params;
-  
-  if (!id) {
-    return new NextResponse("Missing conversation ID", { status: 400 });
-  }
-
-  const apiKey = process.env.ELEVENLABS_API_KEY || "";
-  
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await context.params;
+
+    const config = await prisma.systemConfig.findUnique({ where: { key: 'ELEVENLABS_API_KEY' } });
+    const API_KEY = config?.value || "";
+
     const response = await fetch(`https://api.elevenlabs.io/v1/convai/conversations/${id}/audio`, {
       headers: {
-        "xi-api-key": apiKey
-      }
+        "xi-api-key": API_KEY,
+      },
     });
 
     if (!response.ok) {
-      return new NextResponse(`ElevenLabs API Error: ${response.status}`, { status: response.status });
+      return NextResponse.json({ error: "Failed to fetch audio from ElevenLabs" }, { status: response.status });
     }
 
-    // Proxy the audio stream directly back to the client
-    const headers = new Headers();
-    headers.set("Content-Type", response.headers.get("Content-Type") || "audio/mpeg");
-    headers.set("Content-Disposition", `inline; filename="conversation_${id}.mp3"`);
-    
-    return new NextResponse(response.body, {
+    const arrayBuffer = await response.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    return new NextResponse(buffer, {
       status: 200,
-      headers
+      headers: {
+        "Content-Type": "audio/mpeg",
+        "Content-Length": buffer.length.toString(),
+      },
     });
-  } catch (error: any) {
-    console.error("Audio fetch error:", error);
-    return new NextResponse(error.message, { status: 500 });
+  } catch (error) {
+    console.error("Audio Fetch Error:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

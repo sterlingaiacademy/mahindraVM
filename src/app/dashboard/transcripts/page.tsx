@@ -1,11 +1,17 @@
 import { TranscriptsListClient } from "@/components/TranscriptsListClient";
-
-const API_KEY = process.env.ELEVENLABS_API_KEY || "";
-const AGENT_ID = process.env.ELEVENLABS_AGENT_ID || "";
+import { prisma } from "@/lib/prisma";
 
 export const revalidate = 0; // Disable caching
 
 async function getConversations() {
+  const agentConfig = await prisma.systemConfig.findUnique({ where: { key: 'ELEVENLABS_AGENT_ID' } });
+  const apiConfig = await prisma.systemConfig.findUnique({ where: { key: 'ELEVENLABS_API_KEY' } });
+  
+  const AGENT_ID = agentConfig?.value || "";
+  const API_KEY = apiConfig?.value || "";
+
+  if (!AGENT_ID || !API_KEY) return [];
+
   const res = await fetch(`https://api.elevenlabs.io/v1/convai/conversations?agent_id=${AGENT_ID}`, {
     headers: { "xi-api-key": API_KEY },
     cache: "no-store"
@@ -16,6 +22,11 @@ async function getConversations() {
 }
 
 async function getTranscript(convId: string) {
+  const apiConfig = await prisma.systemConfig.findUnique({ where: { key: 'ELEVENLABS_API_KEY' } });
+  const API_KEY = apiConfig?.value || "";
+
+  if (!API_KEY) return null;
+
   const res = await fetch(`https://api.elevenlabs.io/v1/convai/conversations/${convId}`, {
     headers: { "xi-api-key": API_KEY },
     cache: "no-store"
@@ -26,7 +37,7 @@ async function getTranscript(convId: string) {
 
 export default async function TranscriptsPage({ searchParams }: { searchParams: Promise<{ id?: string }> }) {
   const { id: selectedId } = await searchParams;
-  let conversations = [];
+  let conversations: any[] = [];
   let error = null;
 
   try {

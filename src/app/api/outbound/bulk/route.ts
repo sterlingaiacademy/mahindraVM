@@ -2,11 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 import { randomUUID } from 'crypto';
+import { prisma } from '@/lib/prisma';
 
-const PYTHON_SERVER_URL = process.env.PYTHON_SERVER_URL || "http://localhost:8080/outbound";
-const PYTHON_STATUS_BASE_URL = PYTHON_SERVER_URL.replace(/\/outbound\/?$/, '/status');
-
-const ELEVENLABS_AGENT_ID = process.env.ELEVENLABS_AGENT_ID || "";
 const STATUS_FILE = path.join(process.cwd(), 'campaign_status.json');
 
 const CALL_TIMEOUT_MS = 5 * 60 * 1000;
@@ -40,14 +37,15 @@ function writeStatus(data: CampaignStatus) {
   }
 }
 
-async function waitForLiveKitRoom(roomName: string, phone: string): Promise<'done' | 'timeout' | 'failed'> {
+async function waitForLiveKitRoom(roomName: string, phone: string, pythonBaseUrl: string): Promise<'done' | 'timeout' | 'failed'> {
   const deadline = Date.now() + CALL_TIMEOUT_MS;
+  const statusBase = pythonBaseUrl.replace(/\/outbound\/?$/, '/status');
   
   await new Promise(r => setTimeout(r, CALL_CONNECT_WAIT_MS));
 
   while (Date.now() < deadline) {
     try {
-      const res = await fetch(`${PYTHON_STATUS_BASE_URL}/${encodeURIComponent(roomName)}`);
+      const res = await fetch(`${statusBase}/${encodeURIComponent(roomName)}`);
       if (res.ok) {
         const data = await res.json();
         if (data.status === 'ended') {
@@ -69,7 +67,7 @@ async function waitForLiveKitRoom(roomName: string, phone: string): Promise<'don
   return 'timeout';
 }
 
-async function processBulkCampaign(contacts: ContactStatus[]) {
+async function processBulkCampaign(contacts: ContactStatus[], pythonUrl: string, agentId: string) {
   const state: CampaignStatus = {
     status: 'running',
     startedAt: new Date().toISOString(),
@@ -99,7 +97,7 @@ async function processBulkCampaign(contacts: ContactStatus[]) {
     try {
       const payload = {
         phone: safePhone,
-        agent_id: ELEVENLABS_AGENT_ID,
+        agent_id: agentId,
         call_id: callId,
         conversation_variables: {
           customer_name: contact.name,
@@ -114,7 +112,7 @@ async function processBulkCampaign(contacts: ContactStatus[]) {
 
       console.log(`[Campaign] (${i + 1}/${contacts.length}) Calling ${safePhone} (${contact.name})...`);
 
-      const response = await fetch(PYTHON_SERVER_URL, {
+      const response = await fetch(pythonUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -132,7 +130,7 @@ async function processBulkCampaign(contacts: ContactStatus[]) {
       const roomName = resultData.room_name;
 
       if (roomName) {
-        const result = await waitForLiveKitRoom(roomName, safePhone);
+        const result = await waitForLiveKitRoom(roomName, safePhone, pythonUrl);
         if (result === 'done') {
           contact.status = 'done';
         } else if (result === 'timeout') {
@@ -173,6 +171,11 @@ export async function POST(req: NextRequest) {
   try {
     const { contacts } = await req.json();
 
+    const pyConfig = await prisma.systemConfig.findUnique({ where: { key: 'PYTHON_SERVER_URL' } });
+    const agentConfig = await prisma.systemConfig.findUnique({ where: { key: 'ELEVENLABS_AGENT_ID' } });
+    const pythonUrl = pyConfig?.value || "http://localhost:8080/outbound";
+    const agentId = agentConfig?.value || "";
+
     if (!contacts || !Array.isArray(contacts)) {
       return NextResponse.json({ error: 'Invalid contacts list' }, { status: 400 });
     }
@@ -201,7 +204,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No valid phone numbers found in the list' }, { status: 400 });
     }
 
-    processBulkCampaign(prepared);
+    processBulkCampaign(prepared, pythonUrl, agentId);
 
     return NextResponse.json({
       success: true,

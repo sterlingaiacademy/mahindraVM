@@ -14,10 +14,11 @@ export async function POST(req: NextRequest) {
     }
 
     const { access_token } = JSON.parse(config.value);
-    const phoneNumberId = process.env.META_PHONE_NUMBER_ID;
+    const phoneConfig = await prisma.systemConfig.findUnique({ where: { key: 'META_PHONE_NUMBER_ID' } });
+    const phoneNumberId = phoneConfig?.value;
 
     if (!phoneNumberId) {
-      return NextResponse.json({ error: "META_PHONE_NUMBER_ID is missing in .env" }, { status: 500 });
+      return NextResponse.json({ error: "META_PHONE_NUMBER_ID is not configured in settings." }, { status: 500 });
     }
 
     let successCount = 0;
