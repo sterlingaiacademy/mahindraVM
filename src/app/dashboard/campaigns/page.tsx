@@ -1,4 +1,5 @@
 'use client';
+import Papa from 'papaparse';
 import { useState, useRef, useEffect } from 'react';
 import { Share2, FileImage, UploadCloud, RefreshCw, Plus, X, CheckCircle, AlertCircle, Info, ChevronDown, Activity, LogOut, Edit2, Trash2 } from 'lucide-react';
 
@@ -100,6 +101,25 @@ export default function CampaignsPage() {
     }
   };
 
+  
+  const handleCsvUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    Papa.parse(file, {
+      complete: (results) => {
+        const text = results.data.flat().join(' ');
+        const matches = text.match(/\d{10,15}/g) || [];
+        if (matches.length > 0) {
+          setNewAudienceNumbers(prev => prev + (prev ? '\n' : '') + matches.join('\n'));
+          showToast(`Extracted ${matches.length} numbers from CSV!`, 'success');
+        } else {
+          showToast('No valid phone numbers found in CSV.', 'error');
+        }
+      }
+    });
+  };
+
+
   const handleSaveAudience = async () => {
     if (!newAudienceName || !newAudienceNumbers) return;
     try {
@@ -180,29 +200,35 @@ export default function CampaignsPage() {
       )}
 
       {/* AUDIENCE MODAL */}
-      {isAudienceModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white dark:bg-[#1a1b1e] w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-800">
-            <div className="flex justify-between items-center p-6 border-b border-gray-100 dark:border-gray-800">
-              <h3 className="font-bold text-lg">{editingAudienceId ? 'Edit Audience' : 'Create New Audience'}</h3>
-              <button onClick={() => setIsAudienceModalOpen(false)} className="text-gray-400 hover:text-gray-900 dark:hover:text-white"><X className="w-5 h-5" /></button>
-            </div>
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="text-sm font-bold text-gray-500 mb-1 block">Audience Name</label>
-                <input value={newAudienceName} onChange={e => setNewAudienceName(e.target.value)} placeholder="e.g. October Leads" className="w-full bg-gray-50 dark:bg-black border border-gray-200 dark:border-gray-800 rounded-lg p-3 outline-none focus:border-red-600 transition-colors" />
+        {isAudienceModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md">
+            <div className="bg-white dark:bg-black w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-zinc-800">
+              <div className="flex justify-between items-center p-6 border-b border-gray-100 dark:border-zinc-900">
+                <h3 className="font-bold text-lg text-gray-900 dark:text-white">{editingAudienceId ? 'Edit Audience' : 'Create New Audience'}</h3>
+                <button onClick={() => setIsAudienceModalOpen(false)} className="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"><X className="w-5 h-5" /></button>
               </div>
-              <div>
-                <label className="text-sm font-bold text-gray-500 mb-1 block">Phone Numbers (One per line)</label>
-                <textarea value={newAudienceNumbers} onChange={e => setNewAudienceNumbers(e.target.value)} rows={6} placeholder="919876543210&#10;918765432109" className="w-full bg-gray-50 dark:bg-black border border-gray-200 dark:border-gray-800 rounded-lg p-3 outline-none focus:border-red-600 transition-colors font-mono text-sm" />
+              <div className="p-6 space-y-5">
+                <div>
+                  <label className="text-xs font-bold text-gray-500 mb-2 block uppercase tracking-wider">Audience Name</label>
+                  <input value={newAudienceName} onChange={e => setNewAudienceName(e.target.value)} placeholder="e.g. October Leads" className="w-full bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800 text-gray-900 dark:text-white rounded-lg p-3 outline-none focus:border-red-600 transition-colors" />
+                </div>
+                <div>
+                  <div className="flex justify-between items-end mb-2">
+                    <label className="text-xs font-bold text-gray-500 block uppercase tracking-wider">Phone Numbers</label>
+                    <label className="cursor-pointer text-xs font-bold text-red-600 hover:text-red-500 flex items-center gap-1.5 transition-colors bg-red-600/10 px-3 py-1.5 rounded-full">
+                      <UploadCloud className="w-3.5 h-3.5" /> Upload CSV
+                      <input type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" className="hidden" onChange={handleCsvUpload} />
+                    </label>
+                  </div>
+                  <textarea value={newAudienceNumbers} onChange={e => setNewAudienceNumbers(e.target.value)} rows={6} placeholder="919876543210&#10;918765432109" className="w-full bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800 text-gray-900 dark:text-white rounded-lg p-3 outline-none focus:border-red-600 transition-colors font-mono text-sm" />
+                </div>
+                <button onClick={handleSaveAudience} className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-lg transition-colors shadow-lg shadow-red-900/20">
+                  {editingAudienceId ? 'Save Changes' : 'Create Audience'}
+                </button>
               </div>
-              <button onClick={handleSaveAudience} className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg transition-colors">
-                {editingAudienceId ? 'Save Changes' : 'Create Audience'}
-              </button>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
       <div className="flex justify-between items-center mb-8 border-b border-gray-200 dark:border-zinc-800 pb-6">
         <div>
