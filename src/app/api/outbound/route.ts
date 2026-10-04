@@ -9,12 +9,12 @@ export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
     
-    // Fetch configs
+    // Fetch configs with process.env fallback
     const pyConfig = await prisma.systemConfig.findUnique({ where: { key: 'PYTHON_SERVER_URL' } });
     const agentConfig = await prisma.systemConfig.findUnique({ where: { key: 'ELEVENLABS_AGENT_ID' } });
     
-    const PYTHON_SERVER_URL = pyConfig?.value || "http://localhost:8080/outbound";
-    const AGENT_ID = agentConfig?.value || "";
+    const PYTHON_SERVER_URL = pyConfig?.value || process.env.PYTHON_SERVER_URL || "http://localhost:8080/outbound";
+    const AGENT_ID = agentConfig?.value || process.env.ELEVENLABS_AGENT_ID || "";
 
     if (data.phone) data.phone = data.phone.replace(/[^\d+]/g, '');
 
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      return NextResponse.json({ error: `Python Server Error: ${errorText}` }, { status: response.status });
+      return NextResponse.json({ error: `Engine Server Error: ${errorText}` }, { status: response.status });
     }
 
     const result = await response.json();
@@ -45,6 +45,6 @@ export async function POST(req: NextRequest) {
 
   } catch (error: any) {
     console.error("[Outbound] Error:", error);
-    return NextResponse.json({ error: "Could not connect to Python server. Ensure it is running." }, { status: 500 });
+    return NextResponse.json({ error: "Could not connect to Voice Engine. Ensure it is running." }, { status: 500 });
   }
 }

@@ -6,7 +6,7 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     const { id } = await context.params;
 
     const config = await prisma.systemConfig.findUnique({ where: { key: 'ELEVENLABS_API_KEY' } });
-    const API_KEY = config?.value || "";
+    const API_KEY = config?.value || process.env.ELEVENLABS_API_KEY || "";
 
     const response = await fetch(`https://api.elevenlabs.io/v1/convai/conversations/${id}/audio`, {
       headers: {
@@ -15,7 +15,7 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     });
 
     if (!response.ok) {
-      return NextResponse.json({ error: "Failed to fetch audio from ElevenLabs" }, { status: response.status });
+      return NextResponse.json({ error: "Failed to fetch audio from AI Engine" }, { status: response.status });
     }
 
     const arrayBuffer = await response.arrayBuffer();

@@ -49,7 +49,7 @@ async function waitForLiveKitRoom(roomName: string, phone: string, pythonBaseUrl
       if (res.ok) {
         const data = await res.json();
         if (data.status === 'ended') {
-          console.log(`[Campaign] LiveKit room ${roomName} ended for ${phone}.`);
+          console.log(`[Campaign] Room ${roomName} ended for ${phone}.`);
           return 'done';
         } else {
           console.log(`[Campaign] Call to ${phone} active in ${roomName} (Participants: ${data.participant_count})...`);
@@ -121,7 +121,7 @@ async function processBulkCampaign(contacts: ContactStatus[], pythonUrl: string,
       if (!response.ok) {
         const errorText = await response.text();
         contact.status = 'failed';
-        contact.error = `Server error ${response.status}: ${errorText}`;
+        contact.error = `Engine error ${response.status}: ${errorText}`;
         writeStatus(state);
         continue;
       }
@@ -173,8 +173,10 @@ export async function POST(req: NextRequest) {
 
     const pyConfig = await prisma.systemConfig.findUnique({ where: { key: 'PYTHON_SERVER_URL' } });
     const agentConfig = await prisma.systemConfig.findUnique({ where: { key: 'ELEVENLABS_AGENT_ID' } });
-    const pythonUrl = pyConfig?.value || "http://localhost:8080/outbound";
-    const agentId = agentConfig?.value || "";
+    
+    // Fallback to process.env
+    const pythonUrl = pyConfig?.value || process.env.PYTHON_SERVER_URL || "http://localhost:8080/outbound";
+    const agentId = agentConfig?.value || process.env.ELEVENLABS_AGENT_ID || "";
 
     if (!contacts || !Array.isArray(contacts)) {
       return NextResponse.json({ error: 'Invalid contacts list' }, { status: 400 });

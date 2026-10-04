@@ -7,8 +7,8 @@ async function getConversations() {
   const agentConfig = await prisma.systemConfig.findUnique({ where: { key: 'ELEVENLABS_AGENT_ID' } });
   const apiConfig = await prisma.systemConfig.findUnique({ where: { key: 'ELEVENLABS_API_KEY' } });
   
-  const AGENT_ID = agentConfig?.value || "";
-  const API_KEY = apiConfig?.value || "";
+  const AGENT_ID = agentConfig?.value || process.env.ELEVENLABS_AGENT_ID || "";
+  const API_KEY = apiConfig?.value || process.env.ELEVENLABS_API_KEY || "";
 
   if (!AGENT_ID || !API_KEY) return [];
 
@@ -16,14 +16,14 @@ async function getConversations() {
     headers: { "xi-api-key": API_KEY },
     cache: "no-store"
   });
-  if (!res.ok) throw new Error("Failed to fetch conversations");
+  if (!res.ok) throw new Error("Failed to fetch conversations from AI Engine");
   const data = await res.json();
   return data.conversations || [];
 }
 
 async function getTranscript(convId: string) {
   const apiConfig = await prisma.systemConfig.findUnique({ where: { key: 'ELEVENLABS_API_KEY' } });
-  const API_KEY = apiConfig?.value || "";
+  const API_KEY = apiConfig?.value || process.env.ELEVENLABS_API_KEY || "";
 
   if (!API_KEY) return null;
 

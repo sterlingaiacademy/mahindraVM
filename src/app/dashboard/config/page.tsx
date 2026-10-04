@@ -213,26 +213,6 @@ export default function ConfigPage() {
                 </div>
               </div>
 
-              <div className="space-y-4 pt-4">
-                <h4 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-widest border-b border-gray-200 dark:border-white/10 pb-2">ElevenLabs AI Voice</h4>
-                <div>
-                  <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 pl-2">API Key</label>
-                  <input type="password" value={configValues.ELEVENLABS_API_KEY || ''} onChange={(e) => handleConfigChange('ELEVENLABS_API_KEY', e.target.value)} placeholder="sk_..." className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-white/10 py-2.5 px-4 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-mahindra-red/50 focus:border-mahindra-red transition-all duration-300 font-mono" />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 pl-2">Agent ID</label>
-                  <input type="text" value={configValues.ELEVENLABS_AGENT_ID || ''} onChange={(e) => handleConfigChange('ELEVENLABS_AGENT_ID', e.target.value)} placeholder="e.g. XyZ123..." className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-white/10 py-2.5 px-4 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-mahindra-red/50 focus:border-mahindra-red transition-all duration-300 font-mono" />
-                </div>
-              </div>
-
-              <div className="space-y-4 pt-4">
-                <h4 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-widest border-b border-gray-200 dark:border-white/10 pb-2">Internal Engine</h4>
-                <div>
-                  <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 pl-2">Voice Engine (Python URL)</label>
-                  <input type="text" value={configValues.PYTHON_SERVER_URL || ''} onChange={(e) => handleConfigChange('PYTHON_SERVER_URL', e.target.value)} placeholder="http://localhost:8080/outbound" className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-white/10 py-2.5 px-4 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-400/50 focus:border-gray-400 transition-all duration-300 font-mono" />
-                </div>
-              </div>
-
               <div className="pt-6">
                 <button type="submit" disabled={sysStatus === 'loading'} className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-extrabold uppercase tracking-widest text-sm transition-all duration-300 flex justify-center items-center gap-3 rounded-2xl shadow-lg hover:shadow-blue-600/40 hover:-translate-y-1 active:scale-95 disabled:opacity-50">
                   {sysStatus === 'loading' ? <Loader2 className="w-5 h-5 animate-spin" /> : "Save All Integrations"}
