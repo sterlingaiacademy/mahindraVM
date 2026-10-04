@@ -5,9 +5,9 @@ import Link from "next/link";
 import { Loader2 } from "lucide-react";
 
 const videos = [
-  "/videos/erhORDnwJeQ.mp4",
-  "/videos/HvZHXclEj-Q.mp4",
-  "/videos/Kne9fiwdxpk.mp4"
+  "/videos/1FdR-snE7gQ.mp4",
+  "/videos/N35UCr0bql4.mp4",
+  "/videos/gobKb0dWwTI.mp4"
 ];
 
 export default function LoginPage() {
