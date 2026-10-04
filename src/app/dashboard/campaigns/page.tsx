@@ -293,7 +293,7 @@ export default function CampaignsPage() {
                     </div>
                   </div>
                   <div className="p-1 flex bg-gray-50 dark:bg-zinc-900/50 border-t border-gray-100 dark:border-zinc-800">
-                    <button onClick={handleConnectMeta} className="flex-1 flex items-center justify-center gap-2 p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-zinc-800 text-xs font-bold text-gray-700 dark:text-zinc-300 transition-colors">
+                    <button onClick={() => { fetchAudiences(); fetchData(); }} className="flex-1 flex items-center justify-center gap-2 p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-zinc-800 text-xs font-bold text-gray-700 dark:text-zinc-300 transition-colors">
                       <RefreshCw className="w-3 h-3" /> Refresh
                     </button>
                     <button className="flex-1 flex items-center justify-center gap-2 p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-xs font-bold text-red-600 transition-colors">
@@ -305,7 +305,7 @@ export default function CampaignsPage() {
             </div>
           ) : (
             <button 
-              onClick={() => window.location.href = "/api/meta/oauth/login"}
+              onClick={handleConnectMeta}
               className="flex items-center gap-2 px-5 py-2.5 rounded-lg font-bold border border-gray-300 dark:border-zinc-700 bg-white dark:bg-black hover:bg-gray-50 dark:hover:bg-zinc-900 transition-colors text-sm shadow-sm text-gray-900 dark:text-white">
               <Share2 className="w-4 h-4" /> Connect Meta
             </button>
@@ -517,3 +517,5 @@ export default function CampaignsPage() {
     </div>
   );
 }
+
+
