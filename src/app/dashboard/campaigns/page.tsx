@@ -20,6 +20,7 @@ export default function CampaignsPage() {
   const [newAudienceName, setNewAudienceName] = useState('');
   const [newAudienceNumbers, setNewAudienceNumbers] = useState('');
   const [editingAudienceId, setEditingAudienceId] = useState<string | null>(null);
+  const [audienceToDelete, setAudienceToDelete] = useState<string | null>(null);
 
   // WhatsApp State
   const [adBody, setAdBody] = useState("Hi there! Discover our latest models and book a test drive today.");
@@ -103,16 +104,27 @@ export default function CampaignsPage() {
     setIsAudienceModalOpen(true);
   };
 
-  const handleDeleteAudience = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this audience group?")) return;
+    const handleDeleteAudience = (id: string) => {
+    setAudienceToDelete(id);
+  };
+
+  const confirmDeleteAudience = async () => {
+    if (!audienceToDelete) return;
     try {
-      const res = await fetch(`/api/meta/audiences?id=${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/meta/audiences?id=${audienceToDelete}`, { method: 'DELETE' });
       if (res.ok) {
         showToast("Audience deleted", "success");
+        if (selectedAudience === audienceToDelete) {
+          setSelectedAudience('sandbox');
+        }
         fetchAudiences();
+      } else {
+        showToast("Failed to delete", "error");
       }
-    } catch (e) {
-      showToast("Failed to delete", "error");
+    } catch (e: any) {
+      showToast(e.message, "error");
+    } finally {
+      setAudienceToDelete(null);
     }
   };
 
@@ -514,8 +526,22 @@ export default function CampaignsPage() {
           </div>
         </div>
       )}
+      {/* Delete Confirmation Modal */}
+      {audienceToDelete && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-[#050505] border border-white/10 p-6 rounded-2xl w-full max-w-sm shadow-2xl">
+            <h2 className="text-xl font-bold text-white uppercase tracking-widest mb-4">Delete Audience</h2>
+            <p className="text-sm text-gray-400 mb-6">Are you sure you want to delete this audience group? This action cannot be undone.</p>
+            <div className="flex gap-4">
+              <button onClick={() => setAudienceToDelete(null)} className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-white font-bold uppercase tracking-wider text-xs rounded-lg transition-colors">Cancel</button>
+              <button onClick={confirmDeleteAudience} className="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white font-bold uppercase tracking-wider text-xs rounded-lg transition-colors">Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
 
 
