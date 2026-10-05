@@ -79,7 +79,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           )}
         </div>
         
-        <nav className="flex-1 py-4 flex flex-col gap-1 overflow-y-auto overflow-x-hidden px-3">
+        <nav className="flex-1 py-4 flex flex-col gap-1 overflow-visible px-3">
           {!isCollapsed && <div className="px-3 mb-2 text-xs font-bold uppercase tracking-widest text-gray-500">Admin Panel</div>}
           
           {navItems.map((item) => {
@@ -167,10 +167,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </header>
 
         {/* Scrollable Content */}
-        <main className="flex-1 overflow-y-auto overflow-x-hidden w-full relative">
+        <main className="flex-1 overflow-visible w-full relative">
           {children}
         </main>
       </div>
     </div>
   );
 }
+

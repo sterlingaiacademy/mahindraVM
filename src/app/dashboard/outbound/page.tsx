@@ -41,6 +41,26 @@ export default function OutboundTriggerPage() {
   const [singleStatus, setSingleStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [singleMessage, setSingleMessage] = useState("");
 
+  const [history, setHistory] = useState<any[]>([]);
+
+  const fetchHistory = useCallback(async () => {
+    try {
+      const res = await fetch("/api/outbound/history");
+      if (res.ok) {
+        setHistory(await res.json());
+      }
+    } catch(e) {}
+  }, []);
+
+  const handleClearCampaign = async () => {
+    try {
+      await fetch("/api/outbound/status", { method: "DELETE" });
+      setCampaign(null);
+      fetchHistory();
+    } catch(e) {}
+  };
+
+
   // ── Bulk state ──
   const [bulkList, setBulkList] = useState<any[]>([]);
   const [campaign, setCampaign] = useState<CampaignStatus | null>(null);
@@ -64,7 +84,8 @@ export default function OutboundTriggerPage() {
   // On mount: check if a campaign is already running (e.g., page reload mid-campaign)
   useEffect(() => {
     pollStatus();
-  }, [pollStatus]);
+    fetchHistory();
+  }, [pollStatus, fetchHistory]);
 
   const startPolling = useCallback(() => {
     if (pollRef.current) clearInterval(pollRef.current);
@@ -214,7 +235,7 @@ export default function OutboundTriggerPage() {
               )}
               {campaign.status === "done" && (
                 <button
-                  onClick={() => { setCampaign(null); }}
+                  onClick={handleClearCampaign}
                   className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 text-xs font-bold uppercase tracking-widest rounded-full hover:bg-gray-200 dark:hover:bg-white/10 transition-colors"
                 >
                   New Campaign
@@ -425,6 +446,47 @@ export default function OutboundTriggerPage() {
           </div>
         </div>
       </div>
+
+      {/* RECENT CAMPAIGNS */}
+      {history.length > 0 && (
+        <div className="mt-8">
+          <h2 className="text-xl font-bold uppercase tracking-widest mb-6">Recent Campaigns</h2>
+          <div className="space-y-4">
+            {history.map((h: any, i: number) => {
+               const completed = h.contacts.filter((c: any) => c.status === "done").length;
+               const failed = h.contacts.filter((c: any) => c.status === "failed").length;
+               return (
+                 <div key={i} className="p-4 border border-gray-200 dark:border-white/10 rounded-2xl bg-white dark:bg-black flex items-center justify-between shadow-sm hover:border-gray-300 dark:hover:border-white/20 transition-colors">
+                   <div>
+                     <div className="text-sm font-bold uppercase tracking-wider mb-1 flex items-center gap-2">
+                       <CheckCircle2 className="w-4 h-4 text-green-500" />
+                       CAMPAIGN COMPLETED
+                     </div>
+                     <div className="text-xs text-gray-500 dark:text-gray-400">
+                       Ran on {new Date(h.startedAt).toLocaleString()}
+                     </div>
+                   </div>
+                   <div className="flex gap-4">
+                     <div className="text-center">
+                       <div className="text-lg font-bold">{h.total}</div>
+                       <div className="text-[10px] text-gray-400 uppercase tracking-widest">Total</div>
+                     </div>
+                     <div className="text-center">
+                       <div className="text-lg font-bold text-green-500">{completed}</div>
+                       <div className="text-[10px] text-green-500/70 uppercase tracking-widest">Success</div>
+                     </div>
+                     <div className="text-center">
+                       <div className="text-lg font-bold text-mahindra-red">{failed}</div>
+                       <div className="text-[10px] text-mahindra-red/70 uppercase tracking-widest">Failed</div>
+                     </div>
+                   </div>
+                 </div>
+               );
+            })}
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
