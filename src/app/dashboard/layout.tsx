@@ -41,7 +41,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Sidebar */}
       <aside className={cn(
         "bg-gray-100 dark:bg-black border-r border-gray-200 dark:border-white/5 flex flex-col transition-all duration-300 fixed md:relative z-50 h-full",
-        isCollapsed ? "w-[72px] hidden md:flex" : "w-72 md:w-64",
+        isCollapsed ? "w-72 md:w-[72px]" : "w-72 md:w-64",
         isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
       )}>
         {/* Header */}

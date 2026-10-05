@@ -46,6 +46,35 @@ export default function OutboundTriggerPage() {
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const [selectedHistoryCampaign, setSelectedHistoryCampaign] = useState<any>(null);
 
+  const [inlineStatus, setInlineStatus] = useState<Record<string, 'loading' | 'success' | 'error'>>({});
+
+  const handleInlineRetry = async (contact: any) => {
+    setInlineStatus(prev => ({ ...prev, [contact.phone]: 'loading' }));
+    const result = await triggerCall(contact.phone, { customer_name: contact.name, vehicle: contact.vehicle, context: contact.context || "", phone: contact.phone });
+    
+    if (result.success) {
+      setInlineStatus(prev => ({ ...prev, [contact.phone]: 'success' }));
+      if (selectedHistoryCampaign) {
+        const updatedContacts = selectedHistoryCampaign.contacts.map((c: any) => c.phone === contact.phone ? { ...c, status: 'done', error: undefined } : c);
+        setSelectedHistoryCampaign({ ...selectedHistoryCampaign, contacts: updatedContacts });
+      }
+    } else {
+      setInlineStatus(prev => ({ ...prev, [contact.phone]: 'error' }));
+      if (selectedHistoryCampaign) {
+         const updatedContacts = selectedHistoryCampaign.contacts.map((c: any) => c.phone === contact.phone ? { ...c, error: result.error } : c);
+         setSelectedHistoryCampaign({ ...selectedHistoryCampaign, contacts: updatedContacts });
+      }
+    }
+    setTimeout(() => {
+       setInlineStatus(prev => {
+          const next = {...prev};
+          delete next[contact.phone];
+          return next;
+       });
+    }, 3000);
+  };
+
+
 
   const fetchHistory = useCallback(async () => {
     try {
@@ -548,13 +577,14 @@ export default function OutboundTriggerPage() {
                      </div>
                    </div>
 
-                   <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl overflow-hidden">
-                     <table className="w-full text-left text-sm">
+                   <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl overflow-hidden overflow-x-auto">
+                     <table className="w-full text-left text-sm min-w-[600px]">
                        <thead className="bg-gray-50 dark:bg-black/50 text-xs uppercase tracking-widest text-gray-500 border-b border-gray-200 dark:border-zinc-800">
                          <tr>
                            <th className="px-6 py-4 font-bold">Contact</th>
                            <th className="px-6 py-4 font-bold">Phone</th>
                            <th className="px-6 py-4 font-bold">Status</th>
+                           <th className="px-6 py-4 font-bold">Action</th>
                          </tr>
                        </thead>
                        <tbody className="divide-y divide-gray-200 dark:divide-zinc-800">
@@ -574,6 +604,16 @@ export default function OutboundTriggerPage() {
                                     </span>
                                     {c.error && <span className="text-[10px] text-red-500 max-w-[200px] truncate" title={c.error}>{c.error}</span>}
                                  </div>
+                               </td>
+                               <td className="px-6 py-4">
+                                 <button 
+                                   onClick={(e) => { e.stopPropagation(); handleInlineRetry(c); }} 
+                                   disabled={inlineStatus[c.phone] === 'loading'}
+                                   className="px-3 py-1.5 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 rounded-md text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-colors disabled:opacity-50 text-gray-700 dark:text-gray-300"
+                                 >
+                                   {inlineStatus[c.phone] === 'loading' ? <Loader2 className="w-3 h-3 animate-spin" /> : (inlineStatus[c.phone] === 'success' ? <CheckCircle2 className="w-3 h-3 text-green-500" /> : <RotateCcw className="w-3 h-3" />)}
+                                   {inlineStatus[c.phone] === 'loading' ? 'Calling...' : (inlineStatus[c.phone] === 'success' ? 'Triggered!' : (c.status === 'failed' ? 'Retry' : 'Call Again'))}
+                                 </button>
                                </td>
                              </tr>
                            )
