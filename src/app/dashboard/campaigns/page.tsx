@@ -394,12 +394,13 @@ export default function CampaignsPage() {
         </div>
       </div>
 
-      <div className="flex gap-6 mb-8 border-b border-gray-200 dark:border-zinc-800">
-        <button onClick={() => setActiveTab('CREATE')} className={`pb-4 text-sm font-bold tracking-wider ${activeTab === 'CREATE' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-400 dark:text-zinc-500 hover:text-gray-900 dark:hover:text-white transition-colors'}`}>AD & TEMPLATE CREATOR</button>
-        <button onClick={() => setActiveTab('LEADS')} className={`pb-4 text-sm font-bold tracking-wider flex items-center gap-2 ${activeTab === 'LEADS' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-400 dark:text-zinc-500 hover:text-gray-900 dark:hover:text-white transition-colors'}`}>
-          FETCHED LEADS <span className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full">NEW</span>
-        </button>
-      </div>
+                      <div className="flex gap-6 mb-8 border-b border-gray-200 dark:border-zinc-800">
+          <button onClick={() => setActiveTab('CREATE')} className={`pb-4 text-sm font-bold tracking-wider ${activeTab === 'CREATE' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-400 dark:text-zinc-500 hover:text-gray-900 dark:hover:text-white transition-colors'}`}>AD & TEMPLATE CREATOR</button>
+          <button onClick={() => setActiveTab('DRAFTS')} className={`pb-4 text-sm font-bold tracking-wider ${activeTab === 'DRAFTS' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-400 dark:text-zinc-500 hover:text-gray-900 dark:hover:text-white transition-colors'}`}>SAVED DRAFTS</button>
+          <button onClick={() => setActiveTab('LEADS')} className={`pb-4 text-sm font-bold tracking-wider flex items-center gap-2 ${activeTab === 'LEADS' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-400 dark:text-zinc-500 hover:text-gray-900 dark:hover:text-white transition-colors'}`}>
+            FETCHED LEADS <span className="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full">NEW</span>
+          </button>
+        </div>
 
       {activeTab === 'CREATE' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -648,6 +649,8 @@ export default function CampaignsPage() {
     </div>
   );
 }
+
+
 
 
 
