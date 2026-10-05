@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 
 export async function POST(req: NextRequest) {
   try {
-    const { phoneNumbers } = await req.json();
+    const { phoneNumbers, adBody } = await req.json();
 
     const config = await prisma.systemConfig.findUnique({
       where: { key: 'META_CONFIG' }
@@ -26,15 +26,16 @@ export async function POST(req: NextRequest) {
     for (const phone of phoneNumbers) {
       const payload = {
         messaging_product: "whatsapp",
+        recipient_type: "individual",
         to: phone.replace(/[^0-9]/g, ''),
-        type: "template",
-        template: {
-          name: "hello_world",
-          language: { code: "en_US" }
+        type: "text",
+        text: {
+          preview_url: false,
+          body: adBody || "Hello from Mahindra AI!"
         }
       };
 
-      const res = await fetch(`https://graph.facebook.com/v25.0/${phoneNumberId}/messages`, {
+      const res = await fetch(`https://graph.facebook.com/v18.0/${phoneNumberId}/messages`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${access_token}`,
@@ -43,10 +44,15 @@ export async function POST(req: NextRequest) {
         body: JSON.stringify(payload)
       });
       
-      if (res.ok) successCount++;
+      if (res.ok) {
+        successCount++;
+      } else {
+        const err = await res.json();
+        console.error("WA API Error:", err);
+      }
     }
 
-    return NextResponse.json({ success: true, message: `Sent ${successCount}/${phoneNumbers.length} messages successfully` });
+    return NextResponse.json({ success: true, message: `Sent custom message to ${successCount}/${phoneNumbers.length} contacts.` });
   } catch (error: any) {
     console.error("Push Error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
