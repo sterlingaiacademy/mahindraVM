@@ -167,11 +167,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </header>
 
         {/* Scrollable Content */}
-        <main className="flex-1 overflow-visible w-full relative">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden w-full relative">
           {children}
         </main>
       </div>
     </div>
   );
 }
+
 
