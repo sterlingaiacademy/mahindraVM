@@ -105,6 +105,7 @@ async function processBulkCampaign(contacts: ContactStatus[], pythonUrl: string,
           context: contact.context,
           Direction: 'Outbound',
           direction: 'Outbound',
+          call_type: 'OUTBOUND',
           phone: safePhone,
           call_id: callId
         },
@@ -217,3 +218,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }
+

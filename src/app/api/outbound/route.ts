@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
     if (!data.conversation_variables) data.conversation_variables = {};
     data.conversation_variables.Direction = "Outbound";
     data.conversation_variables.direction = "Outbound";
+    data.conversation_variables.call_type = "OUTBOUND";
     data.conversation_variables.call_id = callId;
     
     if (!data.agent_id) {
@@ -48,3 +49,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Could not connect to Voice Engine. Ensure it is running." }, { status: 500 });
   }
 }
+
