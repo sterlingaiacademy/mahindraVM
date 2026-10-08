@@ -211,6 +211,10 @@ export default function ConfigPage() {
                   <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 pl-2">WhatsApp Phone Number ID</label>
                   <input type="text" value={configValues.META_PHONE_NUMBER_ID || ''} onChange={(e) => handleConfigChange('META_PHONE_NUMBER_ID', e.target.value)} placeholder="e.g. 112233445566778" className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-white/10 py-2.5 px-4 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600/50 focus:border-blue-600 transition-all duration-300 font-mono" />
                 </div>
+                <div>
+                  <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 pl-2">Permanent Access Token <span className="text-green-500 normal-case font-normal">(bypasses OAuth — paste System User token here)</span></label>
+                  <input type="password" value={configValues.META_ACCESS_TOKEN || ''} onChange={(e) => handleConfigChange('META_ACCESS_TOKEN', e.target.value)} placeholder="EAAcWa..." className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-white/10 py-2.5 px-4 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600/50 focus:border-blue-600 transition-all duration-300 font-mono" />
+                </div>
               </div>
 
               <div className="pt-6">

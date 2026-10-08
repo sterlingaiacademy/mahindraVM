@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-const SENSITIVE_KEYS = ['META_APP_SECRET', 'ELEVENLABS_API_KEY'];
+const SENSITIVE_KEYS = ['META_APP_SECRET', 'ELEVENLABS_API_KEY', 'META_ACCESS_TOKEN', 'META_CONFIG'];
 
 export async function POST(req: NextRequest) {
   const isAdmin = req.cookies.get('is_admin')?.value === 'true';
@@ -21,6 +21,17 @@ export async function POST(req: NextRequest) {
           create: { key, value },
         });
       }
+    }
+
+    // If a permanent access token was saved, auto-build META_CONFIG so the campaign push route works
+    const accessTokenEntry = Object.entries(configs).find(([k, v]) => k === 'META_ACCESS_TOKEN' && v && v !== '********');
+    if (accessTokenEntry) {
+      const metaConfig = JSON.stringify({ access_token: accessTokenEntry[1] });
+      await prisma.systemConfig.upsert({
+        where: { key: 'META_CONFIG' },
+        update: { value: metaConfig },
+        create: { key: 'META_CONFIG', value: metaConfig },
+      });
     }
 
     return NextResponse.json({ success: true });
