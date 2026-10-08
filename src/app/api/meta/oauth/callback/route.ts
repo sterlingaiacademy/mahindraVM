@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
@@ -44,3 +45,4 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect(new URL('/dashboard/campaigns?error=auth_failed', req.url));
   }
 }
+
