@@ -71,6 +71,25 @@ export async function POST(req: NextRequest) {
         }
       };
 
+      // Meta API limitation: Interactive cta_url messages DO NOT support media IDs in headers, 
+      // they only support HTTPS links. Since we use base64 uploads (media IDs), we must send 
+      // the image as a standalone message first, followed by the interactive button.
+      if (mediaId) {
+        const imagePayload = {
+          messaging_product: "whatsapp",
+          recipient_type: "individual",
+          to: cleanPhone,
+          type: "image",
+          image: { id: mediaId }
+        };
+        
+        await fetch(`https://graph.facebook.com/v18.0/${phoneNumberId}/messages`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${access_token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify(imagePayload)
+        });
+      }
+
       // If a button URL is provided, format it as an interactive CTA URL message
       if (buttonUrl && buttonText) {
         payload = {
@@ -80,7 +99,6 @@ export async function POST(req: NextRequest) {
           type: "interactive",
           interactive: {
             type: "cta_url",
-            header: mediaId ? { type: "image", image: { id: mediaId } } : undefined,
             body: {
               text: adBody || "Hello from Mahindra AI!"
             },
@@ -97,7 +115,6 @@ export async function POST(req: NextRequest) {
         
         // Clean up undefined fields
         if (!payload.interactive.footer) delete payload.interactive.footer;
-        if (!payload.interactive.header) delete payload.interactive.header;
       }
 
       const res = await fetch(`https://graph.facebook.com/v18.0/${phoneNumberId}/messages`, {
