@@ -255,7 +255,7 @@ export default function CampaignsPage() {
         const res = await fetch('/api/meta/campaign/push', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phoneNumbers, adBody, adFooter, buttonText, buttonUrl })
+          body: JSON.stringify({ phoneNumbers, adBody, adFooter, buttonText, buttonUrl, imageBlob })
         });
         const data = await res.json();
         if (res.ok) showToast(data.message, "success");
@@ -649,6 +649,7 @@ export default function CampaignsPage() {
     </div>
   );
 }
+
 
 
 

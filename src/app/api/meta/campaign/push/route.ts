@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 
 export async function POST(req: NextRequest) {
   try {
-    const { phoneNumbers, adBody, adFooter, buttonText, buttonUrl } = await req.json();
+    const { phoneNumbers, adBody, adFooter, buttonText, buttonUrl, imageBlob } = await req.json();
 
     const config = await prisma.systemConfig.findUnique({
       where: { key: 'META_CONFIG' }
@@ -19,6 +19,39 @@ export async function POST(req: NextRequest) {
 
     if (!phoneNumberId) {
       return NextResponse.json({ error: "WhatsApp Phone Number ID is not configured in Account Config." }, { status: 500 });
+    }
+
+    let mediaId: string | null = null;
+    
+    // Upload image to Meta Media API if provided
+    if (imageBlob && typeof imageBlob === 'string' && imageBlob.startsWith('data:image/')) {
+      try {
+        const matches = imageBlob.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+        if (matches && matches.length === 3) {
+          const mimeType = matches[1];
+          const buffer = Buffer.from(matches[2], 'base64');
+          const blob = new Blob([buffer], { type: mimeType });
+          
+          const formData = new FormData();
+          formData.append('messaging_product', 'whatsapp');
+          formData.append('file', blob, 'banner.jpg');
+          
+          const uploadRes = await fetch(`https://graph.facebook.com/v18.0/${phoneNumberId}/media`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${access_token}` },
+            body: formData
+          });
+          
+          const uploadData = await uploadRes.json();
+          if (uploadData.id) {
+            mediaId = uploadData.id;
+          } else {
+            console.error("Meta Media Upload Error:", uploadData);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to process/upload image:", err);
+      }
     }
 
     let successCount = 0;
@@ -47,6 +80,7 @@ export async function POST(req: NextRequest) {
           type: "interactive",
           interactive: {
             type: "cta_url",
+            header: mediaId ? { type: "image", image: { id: mediaId } } : undefined,
             body: {
               text: adBody || "Hello from Mahindra AI!"
             },
@@ -60,8 +94,10 @@ export async function POST(req: NextRequest) {
             }
           }
         };
-        // Clean up undefined footer to prevent JSON stringify issues
+        
+        // Clean up undefined fields
         if (!payload.interactive.footer) delete payload.interactive.footer;
+        if (!payload.interactive.header) delete payload.interactive.header;
       }
 
       const res = await fetch(`https://graph.facebook.com/v18.0/${phoneNumberId}/messages`, {
