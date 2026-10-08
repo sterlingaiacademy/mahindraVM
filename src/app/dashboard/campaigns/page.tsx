@@ -119,7 +119,7 @@ export default function CampaignsPage() {
         showToast("Please enter your Meta credentials in the Account Config tab first!", "error");
         return;
       }
-      window.location.href = "/api/meta/oauth/login";
+      window.location.href = "/api/meta/oauth/login?t=" + Date.now();
     } catch (error) {
       showToast("Failed to verify Meta configuration.", "error");
     }
@@ -649,6 +649,7 @@ export default function CampaignsPage() {
     </div>
   );
 }
+
 
 
 
