@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 
 export async function POST(req: NextRequest) {
   try {
-    const { phoneNumbers, adBody } = await req.json();
+    const { phoneNumbers, adBody, adFooter, buttonText, buttonUrl } = await req.json();
 
     const config = await prisma.systemConfig.findUnique({
       where: { key: 'META_CONFIG' }
@@ -27,16 +27,42 @@ export async function POST(req: NextRequest) {
     for (const phone of phoneNumbers) {
       const cleanPhone = phone.replace(/[^0-9]/g, '');
 
-      const payload = {
+      let payload: any = {
         messaging_product: "whatsapp",
         recipient_type: "individual",
         to: cleanPhone,
         type: "text",
         text: {
-          preview_url: false,
+          preview_url: true,
           body: adBody || "Hello from Mahindra AI!"
         }
       };
+
+      // If a button URL is provided, format it as an interactive CTA URL message
+      if (buttonUrl && buttonText) {
+        payload = {
+          messaging_product: "whatsapp",
+          recipient_type: "individual",
+          to: cleanPhone,
+          type: "interactive",
+          interactive: {
+            type: "cta_url",
+            body: {
+              text: adBody || "Hello from Mahindra AI!"
+            },
+            footer: adFooter ? { text: adFooter } : undefined,
+            action: {
+              name: "cta_url",
+              parameters: {
+                display_text: buttonText,
+                url: buttonUrl
+              }
+            }
+          }
+        };
+        // Clean up undefined footer to prevent JSON stringify issues
+        if (!payload.interactive.footer) delete payload.interactive.footer;
+      }
 
       const res = await fetch(`https://graph.facebook.com/v18.0/${phoneNumberId}/messages`, {
         method: 'POST',
