@@ -11,10 +11,13 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: 'META_APP_ID not configured in Settings' }, { status: 400 });
   }
 
-  // Detect base URL from request headers or environment
+  // Always detect base URL from the actual incoming request host.
+  // NEVER use NEXT_PUBLIC_BASE_URL — it gets frozen at build time and breaks on remote servers.
   const url = new URL(req.url);
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${url.protocol}//${url.host}`;
-  const redirectUri = `${baseUrl}/api/meta/oauth/callback`;
+  // Use X-Forwarded-Host if behind a proxy, otherwise use the direct host
+  const host = req.headers.get('x-forwarded-host') || req.headers.get('host') || url.host;
+  const proto = req.headers.get('x-forwarded-proto') || url.protocol.replace(':', '');
+  const redirectUri = `${proto}://${host}/api/meta/oauth/callback`;
   
   // Scopes required for WhatsApp and Ads
   const scopes = "whatsapp_business_management,whatsapp_business_messaging,pages_manage_ads,pages_read_engagement";
